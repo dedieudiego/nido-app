@@ -1,0 +1,21 @@
+{
+  "cli": {
+    "version": ">= 5.4.0"
+  },
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "image": "macos-sonoma-14.4-xcode-15.3"
+      }
+    },
+    "production": {
+      "credentialsSource": "remote"
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

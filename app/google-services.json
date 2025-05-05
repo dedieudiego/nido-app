@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "946463573117",
+    "firebase_url": "https://nidohorneros-2.firebaseio.com",
+    "project_id": "nidohorneros-2",
+    "storage_bucket": "nidohorneros-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946463573117:android:b65e1acec5f6320fdd5d14",
+        "android_client_info": {
+          "package_name": "cepave.nidohorneros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946463573117-hk7he0fkp75k1o29fkruf1gi7nqpd354.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXfeuGB5CIZ0xtiDdmNY0VCuKnTKFOQn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946463573117-hk7he0fkp75k1o29fkruf1gi7nqpd354.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946463573117:android:8b405ef2daea6d01dd5d14",
+        "android_client_info": {
+          "package_name": "com.avradev.nidohorneros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946463573117-hk7he0fkp75k1o29fkruf1gi7nqpd354.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXfeuGB5CIZ0xtiDdmNY0VCuKnTKFOQn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946463573117-hk7he0fkp75k1o29fkruf1gi7nqpd354.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

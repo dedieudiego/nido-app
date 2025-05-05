@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MultiSelect</title>
+    <link href="base.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body, html {
+            margin: 0;
+            height: 100%;
+            font: 17px/1.2 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #26242f;
+            color: #fff;
+        }
+        .demo {
+            width: 100%; height: 70%;
+            display: table;
+        }
+        .demo-inner {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .examples {
+            display: flex;
+            justify-content: center;
+        }
+        .examples > .example {
+            width: 350px;
+            margin-right: 50px;
+        }
+        .example > small {
+            display: block;
+            margin-bottom: .5em;
+        }
+        .multi-select {
+            width: 350px;
+            margin: 0 auto;
+        }
+        h1 {
+            width: 350px;
+            margin: 0 auto 1em auto;
+            border-bottom: 2px solid;
+            padding-bottom: .3em;
+        }
+        .si-result {
+            padding: .5em .7em;
+            font: inherit;
+            background: transparent;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+        .si-hide .si-result {
+            border-radius: 3px;
+        }
+        .si-list {
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="demo">
+    <div class="demo-inner">
+        <h1>MultiSelect.js</h1>
+        <div class="examples">
+            <div class="example">
+                <small>Example 1</small>
+                <div class="multi-select-1"></div>
+            </div>
+            <div class="example">
+                <small>Example 2</small>
+                <div class="multi-select-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="multi-select-umd.js"></script>
+<script>
+    // import MultiSelect from '../src/multi-select.js';
+    var multiSelect1 = new MultiSelect('.multi-select-1', {
+        items: ['Art Blakey', 'Charlie Parker', 'Sarah Vaughan', 'Sonny Rollins', 'Miles Davis', 'Max Roach'],
+        current: ['Art Blakey'],
+    });
+    multiSelect1.on('change', function (e) {
+        console.log(e.detail, multiSelect1.getCurrent('value'));
+    });
+    multiSelect1.setCurrent('Sarah Vaughan');
+
+    var multiSelect2 = new MultiSelect('.multi-select-2', {
+        placeholder: 'Select filmmakers',
+        items: ['Hou Hsiao-hsien', 'Wang Bing', 'Wong Kar-wai', 'Jia Zhangke'],
+    });
+    multiSelect2.on('change', function (e) {
+        console.log(e.detail, multiSelect2.getCurrent('value'));
+    });
+</script>
+</body>
+</html>

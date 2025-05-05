@@ -1,0 +1,14 @@
+image: php:8.2
+
+pipelines:
+  branches:
+    production:
+      - step:
+          name: Build and Deploy to Production
+          deployment: Production
+          caches:
+            - composer
+          script:
+            - apt-get update && apt-get install -y sshpass
+            - export SSHPASS=$SSH_PASS
+            - sshpass -e scp -P 5707 -o StrictHostKeyChecking=no -r ./* $SSH_USER@$SSH_SERVER:$REMOTE_PATH

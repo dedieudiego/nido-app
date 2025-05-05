@@ -1,0 +1,8 @@
+<svg id="Grupo_7" data-name="Grupo 7" xmlns="http://www.w3.org/2000/svg" width="31.61" height="31.61" viewBox="0 0 31.61 31.61">
+  <g id="Grupo_6" data-name="Grupo 6">
+    <path id="Trazado_23" data-name="Trazado 23" d="M119.708,96H97.976A1.976,1.976,0,0,0,96,97.976v21.732a1.976,1.976,0,0,0,1.976,1.976h21.732a1.976,1.976,0,0,0,1.976-1.976V97.976A1.976,1.976,0,0,0,119.708,96Zm0,23.708H97.976V97.976h21.732Z" transform="translate(-90.073 -90.073)" fill="#cacfd9"/>
+    <path id="Trazado_24" data-name="Trazado 24" d="M1.976,1.976H23.708V3.951h1.976V1.976A1.976,1.976,0,0,0,23.708,0H1.976A1.976,1.976,0,0,0,0,1.976V23.708a1.976,1.976,0,0,0,1.976,1.976H3.951V23.708H1.976Z" fill="#cacfd9"/>
+    <path id="Trazado_25" data-name="Trazado 25" d="M161.2,280.04H177a.988.988,0,0,0,.7-1.689l-3.951-3.951a.988.988,0,0,0-1.393,0l-1.284,1.284-3.25-3.25a.988.988,0,0,0-1.393,0l-5.927,5.927a.988.988,0,0,0,.691,1.679Z" transform="translate(-150.333 -255.345)" fill="#cacfd9"/>
+    <circle id="Elipse_11" data-name="Elipse 11" cx="2" cy="2" r="2" transform="translate(21.738 12.968)" fill="#cacfd9"/>
+  </g>
+</svg>

@@ -1,0 +1,67 @@
+{
+  "expo": {
+    "name": "NidoHorneros",
+    "slug": "nidohorneros-app",
+    "scheme": "com.nidohorneros",
+    "version": "1.5.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "plugins": ["expo-camera"],
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/a84acb70-6a9b-43f8-8702-6bf419013573"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "notification": {
+      "icon": "./assets/icon.png"
+    },
+    "ios": {
+      "bundleIdentifier": "com.avradev.nidohorneros",
+      "buildNumber": "1.5.1",
+      "supportsTablet": true,
+      "usesAppleSignIn": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Nido Horneros requires access to your camera to let you add pictures to your reports.",
+        "NSPhotoLibraryUsageDescription": "Nido Horneros needs to access your camera roll so that you can upload images to your reports. Your images will not be shared without your permission.",
+        "NSPhotoLibraryAddUsageDescription": "Nido Horneros needs to access your camera roll so that you can upload images to your reports. Your images will not be shared without your permission.",
+        "NSLocationWhenInUseUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
+        "NSLocationAlwaysUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
+        "NSLocationUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is."
+      }
+    },
+    "android": {
+      "package": "com.avradev.nidohorneros",
+      "versionCode": 9,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDa77R6XFPHLWEwoH-f6OEMxS2LjJHpM8Y"
+        }
+      },
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a84acb70-6a9b-43f8-8702-6bf419013573"
+      }
+    },
+    "owner": "avradev",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
+  }
+}

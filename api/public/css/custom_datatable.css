@@ -1,0 +1,49 @@
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 10px !important;
+    border-bottom: 1px solid #111 !important;
+}
+
+table.dataTable thead .sorting_desc {
+    background : none !important;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.page-item.active .page-link {
+    background-color: #FFF !important;
+    color: #004C97 !important;
+    border-radius: .25rem !important;
+    font-size: 9pt !important;
+}
+
+.dataTables_info{
+    font-size: 10pt !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    align-content: center !important;
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 1.5em !important;
+    padding: 0.2em !important;
+    margin-left: 2px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    background : none !important;
+    /* cursor: pointer; */
+    *cursor: hand !important;
+    border: 1px transparent !important;
+    border-radius: .25rem !important;
+    font-size: 10pt !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #00D7A2 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: #00D7A2 !important;
+}

@@ -1,0 +1,8 @@
+<svg id="ic-actions-list-users" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="Rectángulo_460" data-name="Rectángulo 460" width="24" height="24" fill="none"/>
+  <g id="ic-actions-list-users-2" data-name="ic-actions-list-users" transform="translate(1)">
+    <rect id="Rectángulo_450" data-name="Rectángulo 450" width="16" height="20" rx="2" transform="translate(4 2)" fill="none" stroke="#a274a5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <path id="Trazado_427" data-name="Trazado 427" d="M8.614,16.451l.351-1.277c1.161-4.224,6.137-4.224,7.3,0l.351,1.277" fill="none" stroke="#a274a5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <circle id="Elipse_151" data-name="Elipse 151" cx="2.222" cy="2.222" r="2.222" transform="translate(10.391 7.548)" fill="none" stroke="#a274a5" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="1.5"/>
+  </g>
+</svg>

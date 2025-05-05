@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_DATABASE=geovin
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  workspace:
+    build: ./.docker
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./:/var/www:cached
+      - ./.docker/nginx:/etc/nginx/conf.d/
+    ports:
+      - "8000:80"
+      - "443:443"
+    depends_on:
+      - workspace
+
+volumes:
+  mysql-data:

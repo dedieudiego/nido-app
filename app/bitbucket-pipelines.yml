@@ -1,0 +1,39 @@
+#  BitBucket Pipeline
+
+#  manteiner = 'SolveTechEC for AVRA DEV' version="v1.0"
+
+image: node:18-alpine
+definitions:
+  caches:
+    npm: ~/.npm
+pipelines:
+  default:
+      - parallel:
+        - step:
+            script:
+              - echo "Rama no asociada"
+  branches:
+## IOS PIPELINE##
+    prod-ios:
+    - step:
+        name: Construcción y envío de app en EXPO (IOS)
+        deployment: production
+        caches:
+          - npm
+        script:
+          - apk add --no-cache bash git
+          - npm install eas-cli expo-cli --legacy-peer-deps
+          - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          - npx eas-cli build --platform ios --auto-submit --non-interactive
+## ANDROID PIPELINE ##
+    prod-android:
+    - step:
+        name: Construcción y envío de app en EXPO (Android)
+        deployment: production
+        caches:
+          - npm
+        script:
+          - apk add --no-cache bash git
+          - npm install eas-cli expo-cli --legacy-peer-deps
+          - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          - npx eas-cli build --platform android --auto-submit --non-interactive

@@ -1,0 +1,66 @@
+/*!
+ * Bootstrap Steps v1.0.3 (https://github.com/ycs77/bootstrap-steps)
+ * Copyright 2020 Lucas Yang <yangchenshin77@gmail.com>
+ * Licensed under MIT (https://github.com/ycs77/bootstrap-steps/blob/master/LICENSE)
+ */
+.steps {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  overflow-x: auto;
+}
+.steps .step:first-child {
+  margin-left: auto;
+}
+.steps .step:last-child {
+  margin-right: auto;
+}
+
+.step:first-of-type .step-circle::before {
+  display: none;
+}
+.step:last-of-type .step-content {
+  padding-right: 0;
+}
+
+.step-content {
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 5rem;
+  min-width: 12rem;
+  max-width: 12rem;
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+}
+
+.step-circle {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.step-circle::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  width: calc(10rem);
+  height: 2px;
+  transform: translate(-100%, -50%);
+  color: #bdbab7;
+  background-color: currentColor;
+}
+
+.step-text {
+  color: #bdbab7;
+  word-break: break-all;
+  margin-top: 0.25em;
+}
+
+.step-active .step-circle::before {
+  color: #00D7A2;
+}
