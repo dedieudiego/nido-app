@@ -17,6 +17,7 @@ const theMargin = Constants.statusBarHeight + 60
 export default function EndReport({navigation, route}) {
   const {currentUser, dataNidos, updateDataNidos} = useContext(AppStateContext)
   const { navigate } = navigation;
+  console.log("dataNidos", dataNidos);
 
   const uploadImageToSupabase = async(uri) => {
     const base64 = await FileSystem.readAsStringAsync(uri, {
@@ -64,6 +65,7 @@ export default function EndReport({navigation, route}) {
       }).select()
 
       if (location?.length && !locationError) {
+        console.log("STEP", step);
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
@@ -110,7 +112,7 @@ export default function EndReport({navigation, route}) {
                 </Text>
               ) : (
                 <Text style={styles.textSubTitle}>
-                  Te agradecemos el seguimiento del nido.<br />
+                  Te agradecemos el seguimiento del nido.
                   Esperamos que pronto encuentres otro nido que cargar.
                 </Text>
               )}
