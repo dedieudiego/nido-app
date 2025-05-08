@@ -24,6 +24,7 @@ export default function ReportsTerminados({navigation}) {
       )
       .eq('profile_id', currentUser.profile.id)
       .eq('last_step', 4)
+      .order('id', {ascending: false})
 
     setData(data)
     setLoading(false);

@@ -17,7 +17,6 @@ const theMargin = Constants.statusBarHeight + 60
 export default function EndReport({navigation, route}) {
   const {currentUser, dataNidos, updateDataNidos} = useContext(AppStateContext)
   const { navigate } = navigation;
-  console.log("dataNidos", dataNidos);
 
   const uploadImageToSupabase = async(uri) => {
     const base64 = await FileSystem.readAsStringAsync(uri, {
@@ -41,12 +40,13 @@ export default function EndReport({navigation, route}) {
   }
 
   const createNest = async(step) => {
+    console.log("NIDO", dataNidos)
     const image = await uploadImageToSupabase(dataNidos.photo.uri)
     
     const { data, error } = updateDataNidos 
       ? { data: null, error: null }
       : await supabase.from('nests').insert({
-          name: dataNidos.ubicacion?.city,
+          name: dataNidos.nombre,
           profile_id: step.profile_id,
           last_step: step.step
         }).select()

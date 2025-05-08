@@ -17,7 +17,7 @@ import * as Location from 'expo-location'
 
 const theMargin = Constants.statusBarHeight + 50
 export default function CameraBelow({navigation}) {
-  const {dataNidos, setDataNidos} = useContext(AppStateContext)
+  const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [cameraRef, setCameraRef] = useState(null)
   const [isCameraReady, setIsCameraReady] = useState(false)
 
@@ -77,7 +77,11 @@ export default function CameraBelow({navigation}) {
     if (dataNidos.estadio === 4) {
       navigation.navigate('SevenStepReport')
     } else {
-      navigation.navigate('EndReport')
+      if (updateDataNidos) {
+        navigation.navigate('EndReport')
+      } else {
+        navigation.navigate('SetName')
+      }
     }
   }
 

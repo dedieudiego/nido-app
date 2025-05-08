@@ -2,7 +2,7 @@
   "expo": {
     "name": "NidoHorneros",
     "slug": "nidohorneros-app",
-    "scheme": "com.nidohorneros",
+    "scheme": "com.avradev.nidohorneros",
     "version": "1.5.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

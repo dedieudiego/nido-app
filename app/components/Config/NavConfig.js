@@ -27,6 +27,7 @@ import FourthStepReport from '../Report/FourthStepReport'
 import FiveStepReport from '../Report/FiveStepReport'
 import SixStepReport from '../Report/SixStepReport'
 import SevenStepReport from '../Report/SevenStepReport'
+import SetName from '../Report/SetName'
 import EndReport from '../Report/EndReport'
 import ReportsTerminados from '../MyReports/ReportsTerminados'
 import AboutHorneros from '../Info/AboutHorneros'
@@ -258,6 +259,20 @@ export default function NavConfig() {
         <Stack.Screen
           name='SevenStepReport'
           component={SevenStepReport}
+          options={{
+            headerShown: true,
+            headerTitle: false,
+            headerTitleAlign: 'center',
+            headerTransparent: 'true',
+            headerBackTitle: 'Atrás',
+            headerTintColor: '#000000',
+            headerBackTitleStyle: backButtonStyle,
+          }}
+        />
+
+        <Stack.Screen
+          name='SetName'
+          component={SetName}
           options={{
             headerShown: true,
             headerTitle: false,

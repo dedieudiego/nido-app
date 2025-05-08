@@ -7,11 +7,15 @@ import hornero_izq from '../../components/assets/Nidos/formulario/etapa1/q8/izq/
 
 const theMargin = Constants.statusBarHeight + 60
 export default function SevenStepReport({navigation, route}) {
-  const {dataNidos, setDataNidos} = useContext(AppStateContext)
+  const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
 
   const continueReport = (e) => {
     setDataNidos({...dataNidos, nido: e})
-    navigation.navigate('EndReport')
+    if (updateDataNidos) {
+      navigation.navigate('EndReport')
+    } else {
+      navigation.navigate('SetName')
+    }
   }
 
   return (
