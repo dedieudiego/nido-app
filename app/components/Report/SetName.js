@@ -19,7 +19,10 @@ export default function SetName({navigation, route}) {
     <ScrollView style={{marginTop: theMargin}}>
       <View style={styles.vwScreen}>
         <View style={{flex: 1}}>
-          <Text style={styles.textTitle}>¿Cómo quieres llamar a este nido?</Text>
+          <Text style={styles.textTitle}>Cómo querés llamar a este nido?</Text>
+          <Text style={styles.textSubTitle}>
+            Considerá que podés encontrar varios nidos cercanos entre si, es importante que puedas distinguirlos individualmente para su seguimiento
+          </Text>
         </View>
 
         <View style={styles.vwMain}>
@@ -45,10 +48,19 @@ const styles = StyleSheet.create({
   textTitle: {
     color: '#5A6072',
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: 'left',
     lineHeight: 28,
     fontFamily: 'Roboto_700Bold',
     paddingHorizontal: 20,
+  },
+  textSubTitle: {
+    color: '#5A6072',
+    fontSize: 15,
+    textAlign: 'left',
+    lineHeight: 22,
+    fontFamily: 'Roboto_400Regular',
+    paddingHorizontal: 20,
+    paddingTop: 10,
   },
   vwScreen: {
     flex: 1,
