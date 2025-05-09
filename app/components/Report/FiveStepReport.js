@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
   vwScreen: {
     flex: 1,
     justifyContent: 'center',
+    paddingBottom: 40,
   },
   vwMain: {
     flex: 7,

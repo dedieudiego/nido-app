@@ -64,6 +64,7 @@ export default function ReportIntro({navigation, route}) {
 const styles = StyleSheet.create({
   vwMain: {
     marginTop: Constants.statusBarHeight + 60,
+    marginBottom: 40,
   },
   textTitle: {
     color: '#5A6072',

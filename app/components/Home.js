@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
   },
   vwScreen: {
     flex: 1,
+    paddingBottom: 40,
   },
   vwOverMenu: {
     flex: 1,
