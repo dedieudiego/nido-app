@@ -16,7 +16,6 @@ import PhotoBelow from '../Report/PhotoBelow'
 import CameraBelow from '../Report/CameraBelow'
 import MyReports from '../MyReports/MyReports'
 
-import * as Linking from 'expo-linking';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 
@@ -52,23 +51,6 @@ export default function NavConfig() {
     headerTintColor: '#000000',
     headerBackTitleStyle: backButtonStyle,
   }
-
-  useEffect(() => {
-    const handleDeepLink = (event) => {
-      let data = Linking.parse(event.url);
-      console.log('Deep link data:', data);
-
-      if (data.path === 'reset-password') {
-        navigation.navigate('ChangePass', { accessToken: data.queryParams?.access_token });
-      }
-    };
-
-    const subscription = Linking.addEventListener('url', handleDeepLink);
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
 
   return (
     <NavigationContainer 

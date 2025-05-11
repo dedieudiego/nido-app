@@ -6,14 +6,17 @@ import AppStateContext from './Shared/AppStateContext'
 import { FontAwesome } from '@expo/vector-icons'
 import VersionAppText from './Shared/VersionAppText'
 import { supabase } from '../lib/supabase'
+import * as Linking from 'expo-linking';
 
 export default function Home({ route, navigation }) {
   const { currentUser, setCurrentUser, setUpdateDataNidos } = useContext(AppStateContext)
+  const { navigate } = navigation;
+  const url = Linking.useURL();
 
   const closeSession = async () => {
-    const { error } = await supabase.auth.signOut()
+    const { error } = await supabase.auth.signOut();
       
-    if (!error) {
+    if (!error || error.message === "Auth session missing!") {
       setCurrentUser(null)
       DeviceStorage.removeItem('userPersistance')
     };
@@ -21,35 +24,54 @@ export default function Home({ route, navigation }) {
 
   useEffect(() => {
     DeviceStorage.getItem('hideTutorial').then((res) => {
-      if (res !== '1') navigation.navigate('Onboarding')
+      if (res !== '1') navigate('Onboarding')
     })
 
     //HABILITAR EN CASO DE QUERER DEBUGGEAR
-    //navigation.navigate('Tutorial')
+    //navigate('Tutorial')
   }, [])
+
+  useEffect(() => {
+    const handleDeepLink = async (event) => {
+      let data = Linking.parse(event.url);
+
+      const fragment = event.url.split('#')[1];
+      const queryParams = fragment ? Object.fromEntries(new URLSearchParams(fragment)) : {};
+
+      if (data.path === 'ChangePass') {
+        navigate('ChangePass', { access_token: queryParams?.access_token, refresh_token: queryParams?.refresh_token });
+      }
+    };
+
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const goNidosTerminados = () => {
     if (currentUser) {
-      navigation.navigate('ReportsTerminados')
+      navigate('ReportsTerminados')
     } else {
-      navigation.navigate('Login', { backTo: 'ReportsTerminados' })
+      navigate('Login', { backTo: 'ReportsTerminados' })
     }
   }
 
   const goNuevoNido = () => {
     setUpdateDataNidos(false)
     if (currentUser) {
-      navigation.navigate('Report')
+      navigate('Report')
     } else {
-      navigation.navigate('Login', { backTo: 'Report' })
+      navigate('Login', { backTo: 'Report' })
     }
   }
 
   const goNidoConstruccion = () => {
     if (currentUser) {
-      navigation.navigate('MyReports')
+      navigate('MyReports')
     } else {
-      navigation.navigate('Login', { backTo: 'MyReports' })
+      navigate('Login', { backTo: 'MyReports' })
     }
   }
 
@@ -116,7 +138,7 @@ export default function Home({ route, navigation }) {
 
           <TouchableOpacity
             style={[styles.btnVertical]}
-            onPress={() => navigation.navigate('AboutHorneros')}>
+            onPress={() => navigate('AboutHorneros')}>
             <FontAwesome name='user' style={{ color: '#FFF', fontSize: 21 }} />
             <Text allowFontScaling={false} style={[styles.btnGeneralText, { paddingTop: 15, textTransform: 'none' }]}>
               Sobre el{'\n'}Proyecto

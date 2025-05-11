@@ -38,7 +38,8 @@ export default function PassRecovery({navigation}) {
       const data = {email: email}
 
       const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: 'com.nidohorneros://reset-password'
+        redirectTo: 'com.nidohorneros://ChangePass'
+        // redirectTo: 'exp://127.0.0.1:8081/--/ChangePass'
       });
 
       if (error) setErrorMail('Encontramos un error. Por favor intenta más tarde.');

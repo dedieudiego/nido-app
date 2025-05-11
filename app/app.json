@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "NidoHorneros",
-    "slug": "nidohorneros-app",
-    "scheme": "com.avradev.nidohorneros",
-    "version": "1.5.1",
+    "name": "Hornero",
+    "slug": "hornero",
+    "scheme": "com.nidohorneros",
+    "version": "1.6.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -11,18 +11,22 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "plugins": ["expo-camera"],
+    "plugins": [
+      "expo-camera"
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/a84acb70-6a9b-43f8-8702-6bf419013573"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "notification": {
       "icon": "./assets/icon.png"
     },
     "ios": {
-      "bundleIdentifier": "com.avradev.nidohorneros",
-      "buildNumber": "1.5.1",
+      "bundleIdentifier": "com.nidohorneros",
+      "buildNumber": "1.6.3",
       "supportsTablet": true,
       "usesAppleSignIn": false,
       "infoPlist": {
@@ -36,8 +40,8 @@
       }
     },
     "android": {
-      "package": "com.avradev.nidohorneros",
-      "versionCode": 9,
+      "package": "com.nidohorneros",
+      "versionCode": 11,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDa77R6XFPHLWEwoH-f6OEMxS2LjJHpM8Y"
@@ -48,7 +52,9 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -56,10 +62,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a84acb70-6a9b-43f8-8702-6bf419013573"
-      }
+        "projectId": "f33a8272-33c1-4a9d-8ff7-e6cadfee2606"
+      },
+      "supabaseUrl": "https://rgkyshqodtorkauuvzau.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJna3lzaHFvZHRvcmthdXV2emF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDI3NzYsImV4cCI6MjA2MTE3ODc3Nn0.Obawn_i3OflqG4j7QtcXqDuPV_unhrNAsW5dSECEqS8"
     },
-    "owner": "avradev",
+    "owner": "dedieudiego",
     "runtimeVersion": {
       "policy": "sdkVersion"
     }

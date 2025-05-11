@@ -1,7 +1,5 @@
 #  BitBucket Pipeline
 
-#  manteiner = 'SolveTechEC for AVRA DEV' version="v1.0"
-
 image: node:18-alpine
 definitions:
   caches:

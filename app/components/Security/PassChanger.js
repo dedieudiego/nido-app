@@ -16,15 +16,16 @@ import DeviceStorage from '../Shared/DeviceStorage'
 import imagenMensajeEnviado from '../assets/imagenMensajeEnviado.png'
 import ModalSinConexion from '../Shared/ModalSinConexion'
 import AppStateContext from '../Shared/AppStateContext'
+import { supabase } from '../../lib/supabase'
 
 const theMargin = Constants.statusBarHeight + 80
 var url = config.url.API_URL + 'changepassword'
 
-export default function PassChanger({navigation}) {
+export default function PassChanger({route, navigation}) {
   const {currentUser, setCurrentUser, isConnected} = useContext(AppStateContext)
-  const [actualPass, setActualPass] = useState('')
   const [newPass, setNewPass] = useState('')
   const [repeatNewPass, setRepeatNewPass] = useState('')
+  const { access_token, refresh_token } = route.params;
 
   const [errorActual, setErrorActual] = useState('')
   const [errorNew, setErrorNew] = useState('')
@@ -33,11 +34,6 @@ export default function PassChanger({navigation}) {
 
   const validateForm = () => {
     let vResult = true
-
-    if (actualPass === '') {
-      setErrorActual('La contraseña actual es obligatoria.')
-      vResult = false
-    } else setErrorActual('')
 
     if (newPass === '') {
       setErrorNew('La nueva contraseña es obligatoria')
@@ -58,26 +54,31 @@ export default function PassChanger({navigation}) {
     return vResult
   }
 
-  const sendPassChanger = () => {
-    if (validateForm()) {
-      const data = {token: currentUser.access_token, currentpass: actualPass, newpass: newPass}
 
-      axios
-        .put(url, data)
-        .then(function (response) {
-          DeviceStorage.removeItem('userPersistance')
-          setCurrentUser(null)
-          setModalOkVisible(!modalOkVisible)
-        })
-        .catch(function (error) {
-          if (error.response) {
-            setErrorNewRepeat(error.response.data.message)
-          } else if (error.request) {
-            setErrorNewRepeat(error.request)
-          } else {
-            setErrorNewRepeat(error.message)
-          }
-        })
+  const loginWithToken = async () => {
+    const { data, error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token
+    });
+
+    if (error) {
+      console.error('Error iniciando sesión con token:', error.message);
+    } else {
+      console.log('Sesión iniciada, user:', data.session.user);
+    }
+  };
+
+  const sendPassChanger =  async () => {
+    if (validateForm()) {
+      await loginWithToken()
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPass,
+      });
+      if (error) {
+        setErrorNewRepeat('Error al cambiar la contraseña', error.message);
+      } else {
+        setModalOkVisible(true)
+      }
     }
   }
 
@@ -124,20 +125,6 @@ export default function PassChanger({navigation}) {
         </Modal>
 
         <View style={styles.vwMain}>
-          <View style={{flex: 0.15, alignSelf: 'flex-start', marginLeft: '7%'}}>
-            <Text style={styles.textLabelInput}>Contraseña actual</Text>
-          </View>
-
-          <TextInput
-            editable
-            maxLength={40}
-            style={styles.textInput}
-            textContentType='password'
-            secureTextEntry={true}
-            onChangeText={(text) => setActualPass(text)}
-          />
-          {errorActual !== '' && <Text style={styles.messages}>{errorActual}</Text>}
-
           <View style={{flex: 0.15, alignSelf: 'flex-start', marginLeft: '7%'}}>
             <Text style={styles.textLabelInput}>Tu nueva contraseña</Text>
           </View>
