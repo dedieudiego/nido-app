@@ -1,6 +1,7 @@
 
 # env
-app/.env
+.env
+service-account.json
 # dependencies
 /.pnp
 .pnp.js
