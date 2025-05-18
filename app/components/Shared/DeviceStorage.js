@@ -20,9 +20,10 @@ const DeviceStorage = {
   async removeItem(key) {
     try {
       await AsyncStorage.removeItem(key)
+      console.log("REMOVED");
       return true
     } catch (e) {
-      //AsyncStorage Error: ' + error.message
+      console.error('AsyncStorage Error: ' + error.message);
     }
   },
 }

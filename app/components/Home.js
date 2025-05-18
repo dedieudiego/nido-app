@@ -27,8 +27,8 @@ export default function Home({ route, navigation }) {
       if (res !== '1') navigate('Onboarding')
     })
 
-    //HABILITAR EN CASO DE QUERER DEBUGGEAR
-    //navigate('Tutorial')
+    // HABILITAR EN CASO DE QUERER DEBUGGEAR
+    // navigate('Tutorial')
   }, [])
 
   useEffect(() => {

@@ -8,7 +8,6 @@ const theMargin = Constants.statusBarHeight + 60
 export default function SetName({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [name, setName] = useState(dataNidos.ubicacion?.city);
-  console.log(dataNidos)
 
   const continueReport = () => {
     setDataNidos({...dataNidos, nombre: name})

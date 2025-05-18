@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, ScrollView, Image, TouchableOpacity} from 'react
 import Constants from 'expo-constants'
 import {FontAwesome} from '@expo/vector-icons'
 import AppStateContext from '../Shared/AppStateContext'
+import DeviceStorage from '../Shared/DeviceStorage'
 import { supabase } from '../../lib/supabase'
 import * as FileSystem from 'expo-file-system';
 import { decode } from 'base64-arraybuffer'
@@ -15,8 +16,10 @@ import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etap
 const theMargin = Constants.statusBarHeight + 60
 
 export default function EndReport({navigation, route}) {
-  const {currentUser, dataNidos, updateDataNidos} = useContext(AppStateContext)
+  const {currentUser, dataNidos, updateDataNidos, isConnected} = useContext(AppStateContext)
   const { navigate } = navigation;
+
+  console.log("isConnected", isConnected);
 
   const uploadImageToSupabase = async(uri) => {
     const base64 = await FileSystem.readAsStringAsync(uri, {
@@ -77,24 +80,112 @@ export default function EndReport({navigation, route}) {
     };
   };
 
-  useEffect(() => {
-    const nestStep = {
-      profile_id: currentUser.profile.id,
-      step: dataNidos.estadio,
-      height: dataNidos.altura,
-      activity: dataNidos.actividad,
-      context: dataNidos.contexto,
-      water_source: dataNidos.fuente === "si",
-      type_of_source: dataNidos.tipoDeFuente,
-      entry: dataNidos.nido
-    }
+  const syncNest = async(nest) => {
+    console.log("SYNCING", nest);
+    const { step } = nest;
+    const image = await uploadImageToSupabase(nest.image)
     
-    createNest(nestStep);
-  }, [])
+    const { data, error } = await supabase.from('nests').insert({
+      name: nest.name,
+      profile_id: step.profile_id,
+      last_step: step.step
+    }).select()
 
-  // TODO: ENPOINT PARA GUARDAR LA DATA DE dataNidos.
-  //Si devuelve un 200 mostrar la pantalla de Excelente si no, se tiene que crear una pantalla o popups
-  //que diga que se no se guardaron por n error.
+    if (error) {
+      console.log("ERROR", error);
+    } else {
+      if (nest.location) {
+        const { data: location, error: locationError } = await supabase.from('locations').insert({
+          city: nest.location.city,
+          country: nest.location.country,
+          postal_code: nest.location.postalCode,
+          latitude: nest.location.latitude,
+          longitude: nest.location.longitude,
+          region: nest.location.region,
+          subregion: nest.location.subregion,
+        }).select()
+  
+        const { error: stepError } = await supabase.from('nests_steps').insert({
+          ...step,
+          image: image.fullPath,
+          nest_id: data[0].id,
+          location_id: location[0].id
+        })
+        if (stepError) console.log("ERROR", stepError);
+      } else {
+        const { error: stepError } = await supabase.from('nests_steps').insert({
+          ...step,
+          image: image.fullPath,
+          nest_id: data[0].id
+        })
+        if (stepError) console.log("ERROR", stepError);
+      }
+    };
+  };
+
+  const saveNest = (step) => {
+    const nest = {
+      image: dataNidos.photo.uri,
+      step,
+      name: dataNidos.nombre,
+      location: dataNidos.ubicacion
+    }
+
+    DeviceStorage.getItem('nests').then((savedNests) => {
+      if (savedNests) {
+        const parsedNests = JSON.parse(savedNests);
+        if (parsedNests?.length) {
+          const nests = [...parsedNests, nest]
+          DeviceStorage.saveItem('nests', JSON.stringify(nests))
+        } else {
+          DeviceStorage.saveItem('nests', JSON.stringify([nest]))
+        }
+      } else {
+        DeviceStorage.saveItem('nests', JSON.stringify([nest]))
+      }
+    })
+    
+  }
+
+  useEffect(() => {
+    if (dataNidos) {
+      const nestStep = {
+        profile_id: currentUser.profile.id,
+        step: dataNidos.estadio,
+        height: dataNidos.altura,
+        activity: dataNidos.actividad,
+        context: dataNidos.contexto,
+        water_source: dataNidos.fuente === "si",
+        type_of_source: dataNidos.tipoDeFuente,
+        entry: dataNidos.nido
+      }
+    
+      if (isConnected) createNest(nestStep);
+      else saveNest(nestStep)
+    } else {
+      DeviceStorage.getItem('nests').then((savedNests) => {
+        if (savedNests) {
+          const parsedNests = JSON.parse(savedNests);
+          if (parsedNests?.length) {
+            parsedNests
+              .filter((nest) => nest.step.profile_id === currentUser.profile.id)
+              .forEach(async (nest) => {
+                await syncNest(nest);
+              })
+            const rest = parsedNests
+              .filter((nest) => nest.step.profile_id !== currentUser.profile.id)
+            if (rest?.length) {
+              DeviceStorage.saveItem('nests', JSON.stringify(rest));
+            } else {
+              DeviceStorage.removeItem('nests');
+            }
+          }
+        } else {
+          navigate("Inicio");
+        }
+      })
+    }
+  }, [])
 
   return (
     <ScrollView style={{marginTop: theMargin}}>
@@ -117,7 +208,7 @@ export default function EndReport({navigation, route}) {
                 </Text>
               )}
             </>
-          ) : (
+          ) : dataNidos ? (
             <>
               <Text style={styles.textSubTitle}>
                 ¡Se cargó exitosamente tu nido en la app, felicitaciones!
@@ -127,6 +218,15 @@ export default function EndReport({navigation, route}) {
                   Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
                 </Text>
               )}
+            </>
+          ) : (
+            <>
+              <Text style={styles.textSubTitle}>
+                ¡Se sincronizaron exitosamente tus nidos en la app, felicitaciones!
+              </Text>
+              <Text style={{...styles.textSubTitle, marginBottom: 30}}>
+                Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+              </Text>
             </>
           )}
         </View>

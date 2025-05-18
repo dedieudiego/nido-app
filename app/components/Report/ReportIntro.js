@@ -9,7 +9,7 @@ import etapa3 from '../../components/assets/Nidos/etapas/Estadio3.png'
 import etapa4 from '../../components/assets/Nidos/etapas/Estadio4.png'
 
 export default function ReportIntro({navigation, route}) {
-  const {dataNidos, setDataNidos} = useContext(AppStateContext)
+  const {dataNidos, setDataNidos, isConnected} = useContext(AppStateContext)
   const item = route.params?.item
 
   useEffect(() => {
@@ -29,23 +29,29 @@ export default function ReportIntro({navigation, route}) {
     navigation.navigate('FirstStepReport')
   }
 
-  const renderButton = (estadio, image, isDisabled) => {
+  const renderButton = (estadio, image, text, isDisabled) => {
     const ButtonComponent = isDisabled ? View : TouchableOpacity
     return (
       <ButtonComponent
         key={estadio}
         style={[styles.btnLogin]}
         onPress={!isDisabled ? () => startReport(estadio) : undefined}>
-        <Image source={image} style={!isDisabled ? styles.image : styles.imageOff} />
+        {isConnected ? 
+          <Image source={image} style={!isDisabled ? styles.image : styles.imageOff} /> 
+          : <View style={styles.offlineButton}>
+              <Text style={styles.buttonTitle}>{text}</Text>
+              <Text style={styles.buttonSubtitle}>Etapa {estadio}</Text>
+            </View>
+        }
       </ButtonComponent>
     )
   }
 
   const buttons = [
-    {estadio: 1, image: etapa1},
-    {estadio: 2, image: etapa2},
-    {estadio: 3, image: etapa3},
-    {estadio: 4, image: etapa4},
+    {estadio: 1, image: etapa1, text: "Recién empieza"},
+    {estadio: 2, image: etapa2, text: "En progreso"},
+    {estadio: 3, image: etapa3, text: "Avanzado"},
+    {estadio: 4, image: etapa4, text: "Casi terminado"},
   ]
 
   return (
@@ -54,8 +60,8 @@ export default function ReportIntro({navigation, route}) {
         <Text style={styles.textTitle}>¿En qué estadío de construcción está el nido?</Text>
       </View>
 
-      {buttons.map(({estadio, image}) =>
-        renderButton(estadio, image, item?.last_step && estadio <= item.last_step)
+      {buttons.map(({estadio, image, text}) =>
+        renderButton(estadio, image, text, item?.last_step && estadio <= item.last_step)
       )}
     </ScrollView>
   )
@@ -95,5 +101,24 @@ const styles = StyleSheet.create({
     opacity: 0.6,
     resizeMode: 'contain',
     margin: 'auto'
+  },
+  offlineButton: {
+    width: 'calc(100% - 20px)',
+    height: 80,
+    padding: 20,
+    margin: 10,
+    borderWidth: 1,
+    borderColor: '#5A6072',
+    borderRadius: 8
+  },
+  buttonTitle: {
+    color: '#5A6072',
+    fontSize: 16,
+    fontFamily: 'Roboto_700Bold',
+  },
+  buttonSubTitle: {
+    color: '#5A6072',
+    fontSize: 14,
+    fontFamily: 'Roboto_400Regular'
   },
 })

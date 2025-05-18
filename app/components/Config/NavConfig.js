@@ -32,6 +32,7 @@ import ReportsTerminados from '../MyReports/ReportsTerminados'
 import AboutHorneros from '../Info/AboutHorneros'
 import Home from '../Home'
 import OnboardingScreen from '../Onboarding'
+import { navigationRef } from './NavigationService'
 
 const Stack = createStackNavigator()
 
@@ -54,6 +55,7 @@ export default function NavConfig() {
 
   return (
     <NavigationContainer 
+      ref={navigationRef}
       theme={HornerosTheme}
       linking={{
         prefixes: ['com.nidohorneros://'],
