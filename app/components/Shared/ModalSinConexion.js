@@ -82,7 +82,6 @@ const stylesModal = StyleSheet.create({
     height: 50,
     borderRadius: 5,
     justifyContent: 'center',
-    padding: 20,
     width: 130,
   },
   textBtnCancelOk: {
