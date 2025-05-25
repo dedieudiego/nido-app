@@ -3,11 +3,12 @@ import {StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, ActivityInd
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import CardReport from './CardReport'
+import DeviceStorage from '../Shared/DeviceStorage'
 import { supabase } from '../../lib/supabase'
 import hornero_etapa2 from '../../components/assets/Nidos/formulario/etapa1/q1/HORNERO-VECTOR-05.png'
 
 export default function MyReports({navigation}) {
-  const {currentUser, setUpdateDataNidos} = useContext(AppStateContext)
+  const {currentUser, setUpdateDataNidos, isConnected} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
 
@@ -18,21 +19,37 @@ export default function MyReports({navigation}) {
 
   const getData = async() => {
     if (currentUser.profile) {
-      const { data, error } = await supabase.from('nests').select(
-        `
-          *,
-          nests_steps(
+      if (isConnected) {
+        const { data, error } = await supabase.from('nests').select(
+          `
             *,
-            locations(*)
-          )
-        `
-      )
-      .eq('profile_id', currentUser.profile.id)
-      .neq('last_step', 4)
-      .order('id', {ascending: false})
-  
-      setData(data)
-      setLoading(false);
+            nests_steps(
+              *,
+              locations(*)
+            )
+          `
+        )
+        .eq('profile_id', currentUser.profile.id)
+        .neq('last_step', 4)
+        .order('id', {ascending: false})
+    
+        setData(data);
+        setLoading(false);
+        if (data?.length) {
+          DeviceStorage.saveItem('currentNests', JSON.stringify(data))
+        };
+      } else {
+        DeviceStorage.getItem('currentNests').then((data) => {
+          console.log("DATA", data);
+          if (data) {
+            console.log("SAVED", JSON.parse(data));
+            setData(JSON.parse(data));
+            console.log("SAVED DATA");
+          }
+          console.log("LOADING FALSE");
+          setLoading(false);
+        });
+      }
     }
   }
 
@@ -46,7 +63,7 @@ export default function MyReports({navigation}) {
         <View style={styles.vwMain}>
           <Image source={hornero_etapa2} style={styles.imageHornero} />
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Mis nidos en construcción</Text>
+            <Text style={styles.titleText}>Mis nidos en construcción {loading && 'loading'}</Text>
           </View>
 
           {loading && <ActivityIndicator size="large" color="#CD8C59" />}

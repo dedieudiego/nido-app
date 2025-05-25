@@ -8,7 +8,7 @@ import {
   Roboto_500Medium,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native'
 import DeviceStorage from './components/Shared/DeviceStorage'
 import Moment from 'moment/min/moment-with-locales'
 import { supabase } from './lib/supabase'
@@ -43,6 +43,9 @@ export default function App() {
   const [session, setSession] = useState(null)
   const [pendingNests, setPendingNests] = useState(null)
 
+  const isIOS = Platform.OS === 'ios';
+  const isAndroid = Platform.OS === 'android';
+
   const refreshSession = async() => {
     const { data, error } = await supabase.auth.refreshSession()
 
@@ -73,7 +76,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
-      setIsConnected(state.isConnected);
+      setIsConnected(false);
     });
 
     return () => unsubscribe();
@@ -113,10 +116,10 @@ export default function App() {
 
   return (
     <AppStateContext.Provider value={value}>
-      {!isConnected && <View style={styles.warning}>
+      {!isConnected && <View style={{...styles.warning, marginTop: isIOS ? 60 : 30}}>
         <Text style={{textAlign: 'center'}}>No tienes conexión a internet</Text>  
       </View>}
-      {isConnected && pendingNests && <TouchableOpacity onPress={syncNests} style={styles.pendingNests}>
+      {isConnected && pendingNests?.length && <TouchableOpacity onPress={syncNests} style={styles.pendingNests}>
         <Text style={styles.btnGeneralText}>Tienes nidos para sincronizar, haz click aquí</Text>  
       </TouchableOpacity>}
       <NavConfig />
@@ -137,7 +140,6 @@ const styles = StyleSheet.create({
   warning: {
     width: '100%',
     backgroundColor: 'red',
-    marginTop: 60,
     padding: 6,
     zIndex: 9
   },

@@ -85,7 +85,9 @@ export default function EndReport({navigation, route}) {
     const { step } = nest;
     const image = await uploadImageToSupabase(nest.image)
     
-    const { data, error } = await supabase.from('nests').insert({
+    const { data, error } = nest.update 
+      ? { data: null, error: null }
+      : await supabase.from('nests').insert({
       name: nest.name,
       profile_id: step.profile_id,
       last_step: step.step
@@ -108,7 +110,7 @@ export default function EndReport({navigation, route}) {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
-          nest_id: data[0].id,
+          nest_id: nest.update ?? data[0].id,
           location_id: location[0].id
         })
         if (stepError) console.log("ERROR", stepError);
@@ -116,7 +118,7 @@ export default function EndReport({navigation, route}) {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
-          nest_id: data[0].id
+          nest_id: nest.update ?? data[0].id
         })
         if (stepError) console.log("ERROR", stepError);
       }
@@ -128,7 +130,8 @@ export default function EndReport({navigation, route}) {
       image: dataNidos.photo.uri,
       step,
       name: dataNidos.nombre,
-      location: dataNidos.ubicacion
+      location: dataNidos.ubicacion,
+      update: updateDataNidos ? dataNidos.id : false
     }
 
     DeviceStorage.getItem('nests').then((savedNests) => {

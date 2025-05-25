@@ -204,7 +204,7 @@ export default function Login({route, navigation}) {
           </TouchableHighlight>
         </View>
 
-        {/* <View style={styles.socialLogin}>
+        <View style={styles.socialLogin}>
             <TouchableHighlight
               style={styles.btnSocial}
               activeOpacity={1}
@@ -226,7 +226,7 @@ export default function Login({route, navigation}) {
                 <Text>Vincular con mi cuenta Facebook</Text>
               </View>
             </TouchableHighlight>
-        </View> */}
+        </View>
 
         <View style={styles.vwBottom}>
           <TouchableHighlight
