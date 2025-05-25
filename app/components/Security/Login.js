@@ -45,8 +45,9 @@ export default function Login({route, navigation}) {
   const [isLoading, setIsLoading] = useState(false)
 
   GoogleSignin.configure({
-    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    scopes: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
     webClientId: '651519405886-v41t14fjqc4jer1fpujlnf3jnav3d4jc.apps.googleusercontent.com',
+    iosClientId: '651519405886-qvbal3240pogi1g8f15o2uvgu5107op1.apps.googleusercontent.com'
   })
 
   useEffect(() => {
@@ -141,6 +142,71 @@ export default function Login({route, navigation}) {
       setIsLogged('Google Error.')
     }
   }
+  
+  const createProfile = async (data, userInfo) => {
+    const { email, givenName, familyName } = userInfo.data.user;
+
+    const { data: profile, error } = await supabase.from('profiles').insert({
+      email: email,
+      first_name: givenName,
+      last_name: familyName,
+      user_id: data.user.id,
+    }).select()
+
+    if (error) setUserMessage(error.message);
+    else {
+      const user = {...data, profile: profile[0]};
+      setCurrentUser(user);
+      const jsonValue = JSON.stringify(user)
+      DeviceStorage.saveItem('userPersistance', jsonValue)
+
+      navigate('Inicio')
+    }
+  }
+
+  const googleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      if (userInfo.data.idToken) {
+        const { data, error } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: userInfo.data.idToken,
+        })
+        if (!error && data) {
+          const { data: profile } = await supabase.from('profiles')
+            .select('*')
+            .eq('user_id', data.user.id)
+            .single()
+
+          if (!profile) {
+            createProfile(data, userInfo);
+          } else {
+            const user = {...data, profile};
+            setCurrentUser(user)
+      
+            const jsonValue = JSON.stringify(user)
+            DeviceStorage.saveItem('userPersistance', jsonValue)
+      
+            navigate('Inicio')
+          }
+
+        }
+      } else {
+        throw new Error('no ID token present!')
+      }
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  }
 
   //OFFLINE
   if (!isConnected) {
@@ -217,7 +283,7 @@ export default function Login({route, navigation}) {
             <TouchableHighlight
               style={styles.btnSocial}
               activeOpacity={1}
-              onPress={() => console.log("Google")}
+              onPress={googleLogin}
             >
               <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
                 <Image source={IconGoogle} />
@@ -225,7 +291,7 @@ export default function Login({route, navigation}) {
               </View>
             </TouchableHighlight>
 
-            <TouchableHighlight
+            {/* <TouchableHighlight
               style={styles.btnSocial}
               activeOpacity={1}
               onPress={() => console.log("Google")}
@@ -234,7 +300,7 @@ export default function Login({route, navigation}) {
                 <Image source={IconFacebook} />
                 <Text>Vincular con mi cuenta Facebook</Text>
               </View>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
         </View>
 
         <View style={styles.vwBottom}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import DeviceStorage from './Shared/DeviceStorage'
 import Hornero from './assets/hornero.png'
@@ -11,6 +11,7 @@ import * as Linking from 'expo-linking';
 export default function Home({ route, navigation }) {
   const { currentUser, setCurrentUser, setUpdateDataNidos } = useContext(AppStateContext)
   const { navigate } = navigation;
+  const [debug ,setDebug] = useState();
   const url = Linking.useURL();
 
   const closeSession = async () => {
@@ -33,7 +34,9 @@ export default function Home({ route, navigation }) {
 
   useEffect(() => {
     const handleDeepLink = async (event) => {
+      console.log("EVENT", event);
       let data = Linking.parse(event.url);
+      if (data) setDebug(data);
 
       const fragment = event.url.split('#')[1];
       const queryParams = fragment ? Object.fromEntries(new URLSearchParams(fragment)) : {};
@@ -84,6 +87,8 @@ export default function Home({ route, navigation }) {
           ) : (
             <Text allowFontScaling={false} style={styles.textHello}>¡Hola!</Text>
           )}
+
+          {debug && <Text style={{...styles.text, fontSize: 10}}>Debug: {debug}</Text>}
 
           <Text allowFontScaling={false} style={styles.text}>
             Bienvenidx a la app de horneros <VersionAppText />
