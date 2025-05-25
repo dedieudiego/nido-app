@@ -76,7 +76,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
-      setIsConnected(false);
+      setIsConnected(state.isConnected);
     });
 
     return () => unsubscribe();

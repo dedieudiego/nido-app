@@ -12,7 +12,13 @@
       "backgroundColor": "#ffffff"
     },
     "plugins": [
-      "expo-camera"
+      "expo-camera",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.651519405886-qvbal3240pogi1g8f15o2uvgu5107op1"
+        }
+      ]
     ],
     "updates": {
       "fallbackToCacheTimeout": 0,

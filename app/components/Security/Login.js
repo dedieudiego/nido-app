@@ -10,6 +10,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native'
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin'
 import Hornero from '../assets/Nidos/hornero-logo-fin-variables.png'
 import btnCerrar from '../assets/btnCerrar.png'
 import IconFacebook from '../assets/iconFacebook.png'
@@ -39,6 +43,11 @@ export default function Login({route, navigation}) {
   const [errorPassword, setErrorPassword] = useState('')
   const [backToParam, setBackTo] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  GoogleSignin.configure({
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    webClientId: '651519405886-v41t14fjqc4jer1fpujlnf3jnav3d4jc.apps.googleusercontent.com',
+  })
 
   useEffect(() => {
     //TODO >> SACAR ESTO Y TOMARLO DEL CONTEXT
