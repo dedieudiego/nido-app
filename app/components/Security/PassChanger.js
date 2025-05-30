@@ -133,6 +133,7 @@ export default function PassChanger({route, navigation}) {
             editable
             maxLength={40}
             style={styles.textInput}
+            placeholderTextColor="#999"
             textContentType='password'
             secureTextEntry={true}
             onChangeText={(text) => setNewPass(text)}
@@ -147,6 +148,7 @@ export default function PassChanger({route, navigation}) {
             editable
             maxLength={40}
             style={styles.textInput}
+            placeholderTextColor="#999"
             textContentType='password'
             secureTextEntry={true}
             onChangeText={(text) => setRepeatNewPass(text)}

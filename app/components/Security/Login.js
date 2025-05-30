@@ -241,6 +241,7 @@ export default function Login({route, navigation}) {
             maxLength={40}
             autoCompleteType='email'
             placeholder='Ingresá tu correo electrónico'
+            placeholderTextColor="#999"
             style={styles.textInput}
             autoCapitalize='none'
             keyboardType='email-address'
@@ -253,6 +254,7 @@ export default function Login({route, navigation}) {
             editable
             maxLength={40}
             placeholder='Ingresá tu contraseña'
+            placeholderTextColor="#999"
             style={styles.textInput}
             textContentType='password'
             onChangeText={(text) => onChangePass(text)}
@@ -331,6 +333,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: '3%',
     marginVertical: 10,
+    color: '#000000',
   },
   txtTitle: {
     color: '#57AAF2',

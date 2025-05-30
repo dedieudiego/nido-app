@@ -104,6 +104,7 @@ export default function PassRecovery({navigation}) {
           <TextInput
             editable
             placeholder='Correo electrónico'
+            placeholderTextColor="#999"
             maxLength={40}
             autoCompleteType='email'
             style={styles.textInput}
