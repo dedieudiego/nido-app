@@ -46,8 +46,9 @@ export default function Login({route, navigation}) {
 
   GoogleSignin.configure({
     scopes: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
-    webClientId: '651519405886-v41t14fjqc4jer1fpujlnf3jnav3d4jc.apps.googleusercontent.com',
-    iosClientId: '651519405886-qvbal3240pogi1g8f15o2uvgu5107op1.apps.googleusercontent.com'
+    webClientId: '651519405886-me8voa58400ur00j35k070tvbncjk22i.apps.googleusercontent.com',
+    iosClientId: '651519405886-qvbal3240pogi1g8f15o2uvgu5107op1.apps.googleusercontent.com',
+    offlineAccess: true
   })
 
   useEffect(() => {
@@ -196,6 +197,7 @@ export default function Login({route, navigation}) {
         throw new Error('no ID token present!')
       }
     } catch (error) {
+      console.log("ERROR", error);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
