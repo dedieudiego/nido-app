@@ -75,6 +75,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    console.log("CHECK CONNECTION");
     const unsubscribe = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected);
     });
@@ -88,7 +89,6 @@ export default function App() {
       let user = JSON.parse(res)
       
       if (user) {
-        console.log("USER", user);
         if (Moment().isAfter(Moment(user.session.expires_at * 1000))) {
           refreshSession();
         } else setCurrentUser(user)

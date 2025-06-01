@@ -18,6 +18,7 @@ export default function MyReports({navigation}) {
   }
 
   const getData = async() => {
+    console.log({isConnected})
     if (currentUser.profile) {
       if (isConnected) {
         const { data, error } = await supabase.from('nests').select(
@@ -40,13 +41,9 @@ export default function MyReports({navigation}) {
         };
       } else {
         DeviceStorage.getItem('currentNests').then((data) => {
-          console.log("DATA", data);
           if (data) {
-            console.log("SAVED", JSON.parse(data));
             setData(JSON.parse(data));
-            console.log("SAVED DATA");
           }
-          console.log("LOADING FALSE");
           setLoading(false);
         });
       }
@@ -63,7 +60,7 @@ export default function MyReports({navigation}) {
         <View style={styles.vwMain}>
           <Image source={hornero_etapa2} style={styles.imageHornero} />
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Mis nidos en construcción {loading && 'loading'}</Text>
+            <Text style={styles.titleText}>Mis nidos en construcción</Text>
           </View>
 
           {loading && <ActivityIndicator size="large" color="#CD8C59" />}

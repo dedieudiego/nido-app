@@ -177,6 +177,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -191,6 +192,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -205,6 +207,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -232,6 +235,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -260,6 +264,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -274,6 +279,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -288,6 +294,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -302,6 +309,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -316,6 +324,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -330,6 +339,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: 'Mis Reportes',
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
@@ -345,6 +355,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: 'Reportes Terminados',
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',

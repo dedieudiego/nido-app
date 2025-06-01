@@ -12,22 +12,34 @@ export default function ReportsTerminados({navigation}) {
   const [loading, setLoading] = useState(true)
 
   const getData = async() => {
-    const { data, error } = await supabase.from('nests')
-      .select(
-        `
-          *,
-          nests_steps(
+    if (isConnected) {
+      const { data, error } = await supabase.from('nests')
+        .select(
+          `
             *,
-            locations(*)
-          )
-        `
-      )
-      .eq('profile_id', currentUser.profile.id)
-      .eq('last_step', 4)
-      .order('id', {ascending: false})
-
-    setData(data)
-    setLoading(false);
+            nests_steps(
+              *,
+              locations(*)
+            )
+          `
+        )
+        .eq('profile_id', currentUser.profile.id)
+        .eq('last_step', 4)
+        .order('id', {ascending: false})
+  
+      setData(data)
+      if (data?.length) {
+        DeviceStorage.saveItem('finishedNests', JSON.stringify(data))
+      };
+      setLoading(false);
+    } else {
+      DeviceStorage.getItem('finishedNests').then((data) => {
+        if (data) {
+          setData(JSON.parse(data));
+        }
+        setLoading(false);
+      });
+    }
   }
 
   useEffect(() => {
