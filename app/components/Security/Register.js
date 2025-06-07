@@ -177,7 +177,7 @@ export default function Register({navigation}) {
           <TextInput
             editable
             placeholder='Nombres'
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             autoCompleteType='name'
             style={styles.textInput}
             maxLength={50}
@@ -188,7 +188,7 @@ export default function Register({navigation}) {
 
           <TextInput
             placeholder='Apellido'
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             editable
             maxLength={50}
             style={styles.textInput}
@@ -200,7 +200,7 @@ export default function Register({navigation}) {
           <TextInput
             editable
             placeholder='Correo Electrónico'
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             maxLength={50}
             autoCapitalize='none'
             keyboardType='email-address'
@@ -214,7 +214,7 @@ export default function Register({navigation}) {
           <TextInput
             editable
             placeholder='Contraseña'
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             autoCapitalize='none'
             style={styles.textInput}
             maxLength={50}

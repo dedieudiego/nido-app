@@ -11,7 +11,6 @@ import * as Linking from 'expo-linking';
 export default function Home({ route, navigation }) {
   const { currentUser, setCurrentUser, setUpdateDataNidos } = useContext(AppStateContext)
   const { navigate } = navigation;
-  const [debug ,setDebug] = useState();
   const url = Linking.useURL();
 
   const closeSession = async () => {
@@ -34,14 +33,12 @@ export default function Home({ route, navigation }) {
 
   useEffect(() => {
     const handleDeepLink = async (event) => {
-      console.log("EVENT", event);
       let data = Linking.parse(event.url);
-      if (data) setDebug(data);
 
       const fragment = event.url.split('#')[1];
       const queryParams = fragment ? Object.fromEntries(new URLSearchParams(fragment)) : {};
 
-      if (data.path === 'ChangePass') {
+      if (data.path === 'ChangePass' || data.hostname === 'ChangePass') {
         navigate('ChangePass', { access_token: queryParams?.access_token, refresh_token: queryParams?.refresh_token });
       }
     };
@@ -87,8 +84,6 @@ export default function Home({ route, navigation }) {
           ) : (
             <Text allowFontScaling={false} style={styles.textHello}>¡Hola!</Text>
           )}
-
-          {debug && <Text style={{...styles.text, fontSize: 10}}>Debug: {debug}</Text>}
 
           <Text allowFontScaling={false} style={styles.text}>
             Bienvenidx a la app de horneros <VersionAppText />

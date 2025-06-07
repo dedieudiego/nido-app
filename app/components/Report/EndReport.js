@@ -16,7 +16,7 @@ import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etap
 const theMargin = Constants.statusBarHeight + 60
 
 export default function EndReport({navigation, route}) {
-  const {currentUser, dataNidos, updateDataNidos, isConnected} = useContext(AppStateContext)
+  const {currentUser, dataNidos, updateDataNidos, isConnected, setRefreshStorage} = useContext(AppStateContext)
   const { navigate } = navigation;
 
   console.log("isConnected", isConnected);
@@ -181,7 +181,8 @@ export default function EndReport({navigation, route}) {
               DeviceStorage.saveItem('nests', JSON.stringify(rest));
             } else {
               DeviceStorage.removeItem('nests');
-            }
+            };
+            setRefreshStorage(true);
           }
         } else {
           navigate("Inicio");

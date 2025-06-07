@@ -21,6 +21,7 @@ export default function App() {
   const [isConnected, setIsConnected] = useState(true)
   const [dataNidos, setDataNidos] = useState(null)
   const [updateDataNidos, setUpdateDataNidos] = useState(false)
+  const [refreshStorage, setRefreshStorage] = useState(false);
 
   const value = {
     currentUser,
@@ -31,6 +32,8 @@ export default function App() {
     setDataNidos,
     updateDataNidos,
     setUpdateDataNidos,
+    refreshStorage,
+    setRefreshStorage
   }
 
   let [fontsLoaded] = useFonts({
@@ -78,6 +81,7 @@ export default function App() {
     console.log("CHECK CONNECTION");
     const unsubscribe = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected);
+      // setIsConnected(false);
     });
 
     return () => unsubscribe();
@@ -105,6 +109,19 @@ export default function App() {
       }
     })
   }, [])
+
+  useEffect(() => {
+    DeviceStorage.getItem('nests').then((res) => {
+      let nests = JSON.parse(res)
+
+      if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
+        setPendingNests(nests);
+      } else {
+        setPendingNests(null);
+      }
+    })
+    setRefreshStorage(false);
+  }, [refreshStorage])
 
   if (!fontsLoaded) {
     return (

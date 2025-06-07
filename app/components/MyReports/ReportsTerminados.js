@@ -3,11 +3,12 @@ import {StyleSheet, View, Text, ScrollView, Image, ActivityIndicator} from 'reac
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import CardReport from './CardReport'
+import DeviceStorage from '../Shared/DeviceStorage'
 import { supabase } from '../../lib/supabase'
 import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etapa4/HORNERO-VECTOR-13.png'
 
 export default function ReportsTerminados({navigation}) {
-  const {currentUser} = useContext(AppStateContext)
+  const {currentUser, isConnected} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -28,6 +29,7 @@ export default function ReportsTerminados({navigation}) {
         .order('id', {ascending: false})
   
       setData(data)
+      
       if (data?.length) {
         DeviceStorage.saveItem('finishedNests', JSON.stringify(data))
       };

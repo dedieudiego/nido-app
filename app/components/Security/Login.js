@@ -241,7 +241,7 @@ export default function Login({route, navigation}) {
             maxLength={40}
             autoCompleteType='email'
             placeholder='Ingresá tu correo electrónico'
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             style={styles.textInput}
             autoCapitalize='none'
             keyboardType='email-address'
@@ -254,7 +254,7 @@ export default function Login({route, navigation}) {
             editable
             maxLength={40}
             placeholder='Ingresá tu contraseña'
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             style={styles.textInput}
             textContentType='password'
             onChangeText={(text) => onChangePass(text)}

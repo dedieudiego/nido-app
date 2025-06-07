@@ -38,7 +38,7 @@ export default function ReportIntro({navigation, route}) {
         onPress={!isDisabled ? () => startReport(estadio) : undefined}>
         {isConnected ? 
           <Image source={image} style={!isDisabled ? styles.image : styles.imageOff} /> 
-          : <View style={{...styles.offlineButton, opacity: isDisabled ? '0.5' : '1'}}>
+          : <View style={{...styles.offlineButton, opacity: isDisabled ? 0.5 : 1}}>
               <Text style={styles.buttonTitle}>{text}</Text>
               <Text style={styles.buttonSubtitle}>Etapa {estadio}</Text>
             </View>
