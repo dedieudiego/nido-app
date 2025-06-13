@@ -195,11 +195,11 @@ const styles = StyleSheet.create({
   },
   vwScreen: {
     flex: 1,
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   vwOverMenu: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 20,
     backgroundColor: '#EEEEEE',
     borderBottomLeftRadius: 50,
   },
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 30,
     backgroundColor: '#EEEEEE',
-    paddingTop: 20,
+    paddingTop: 10,
   },
   text: {
     color: '#5A6072',

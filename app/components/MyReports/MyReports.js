@@ -36,9 +36,13 @@ export default function MyReports({navigation}) {
     
         setData(data);
         setLoading(false);
-        if (data?.length) {
-          DeviceStorage.saveItem('currentNests', JSON.stringify(data))
-        };
+        if (!error) {
+          if (data?.length) {
+            DeviceStorage.saveItem('currentNests', JSON.stringify(data))
+          } else {
+            DeviceStorage.removeItem('currentNests');
+          };
+        }
       } else {
         DeviceStorage.getItem('currentNests').then((data) => {
           if (data) {

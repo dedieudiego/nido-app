@@ -30,9 +30,13 @@ export default function ReportsTerminados({navigation}) {
   
       setData(data)
       
-      if (data?.length) {
-        DeviceStorage.saveItem('finishedNests', JSON.stringify(data))
-      };
+      if (!error) {
+        if (data?.length) {
+          DeviceStorage.saveItem('finishedNests', JSON.stringify(data))
+        } else {
+          DeviceStorage.removeItem('finishedNests');
+        };
+      }
       setLoading(false);
     } else {
       DeviceStorage.getItem('finishedNests').then((data) => {
