@@ -16,7 +16,14 @@ import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etap
 const theMargin = Constants.statusBarHeight + 60
 
 export default function EndReport({navigation, route}) {
-  const {currentUser, dataNidos, updateDataNidos, isConnected, setRefreshStorage} = useContext(AppStateContext)
+  const {
+    currentUser,
+    dataNidos,
+    setDataNidos,
+    updateDataNidos,
+    isConnected,
+    setRefreshStorage
+  } = useContext(AppStateContext)
   const [loading, setLoading] = useState(false);
   const { navigate } = navigation;
 
@@ -80,6 +87,7 @@ export default function EndReport({navigation, route}) {
           location_id: location[0].id
         })
         if (stepError) console.log("ERROR", stepError);
+        setDataNidos(false);
         setLoading(false);
       }
     };
@@ -118,7 +126,7 @@ export default function EndReport({navigation, route}) {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
-          nest_id: nest.update ?? data[0].id,
+          nest_id: nest.update || data[0].id,
           location_id: location[0].id
         })
         if (stepError) {
@@ -129,7 +137,7 @@ export default function EndReport({navigation, route}) {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
-          nest_id: nest.update ?? data[0].id
+          nest_id: nest.update || data[0].id
         })
         if (stepError) console.log("ERROR", stepError);
         setLoading(false);
@@ -161,11 +169,13 @@ export default function EndReport({navigation, route}) {
         DeviceStorage.saveItem('nests', JSON.stringify([nest]))
       }
       setLoading(false);
+      setDataNidos(false);
     })
     
   }
 
   useEffect(() => {
+    console.log({dataNidos});
     if (dataNidos) {
       const nestStep = {
         profile_id: currentUser.profile.id,
@@ -184,10 +194,14 @@ export default function EndReport({navigation, route}) {
       DeviceStorage.getItem('nests').then((savedNests) => {
         if (savedNests) {
           const parsedNests = JSON.parse(savedNests);
+          console.log({
+            parsedNests
+          })
           if (parsedNests?.length) {
             parsedNests
               .filter((nest) => nest.step.profile_id === currentUser.profile.id)
               .forEach(async (nest) => {
+                console.log("THIS NEST", nest);
                 await syncNest(nest);
               })
             const rest = parsedNests
@@ -197,13 +211,13 @@ export default function EndReport({navigation, route}) {
             } else {
               DeviceStorage.removeItem('nests');
             };
-            setRefreshStorage(true);
           }
         } else {
           navigate("Inicio");
         }
       })
     }
+    setRefreshStorage(true);
   }, [])
 
   return (
@@ -215,28 +229,44 @@ export default function EndReport({navigation, route}) {
               <Text style={styles.textTitle}>¡Excelente!</Text>
               {updateDataNidos ? (
                 <>
-                  <Text style={styles.textSubTitle}>
-                    ¡Se cargo exitosamente la etapa {dataNidos?.estadio}, felicitaciones!
-                  </Text>
-                  {dataNidos?.estadio !== 4 ? (
-                    <Text style={styles.textSubTitle}>
-                      Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
-                    </Text>
+                  {isConnected ? (
+                    <>
+                      <Text style={styles.textSubTitle}>
+                        ¡Se cargo exitosamente la etapa {dataNidos?.estadio}, felicitaciones!
+                      </Text>
+                      {dataNidos?.estadio !== 4 ? (
+                        <Text style={styles.textSubTitle}>
+                          Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+                        </Text>
+                      ) : (
+                        <Text style={styles.textSubTitle}>
+                          Te agradecemos el seguimiento del nido.
+                          Esperamos que pronto encuentres otro nido que cargar.
+                        </Text>
+                      )}
+                    </>
                   ) : (
                     <Text style={styles.textSubTitle}>
-                      Te agradecemos el seguimiento del nido.
-                      Esperamos que pronto encuentres otro nido que cargar.
+                      Cuando se reestablezca la conexión a internet vas a poder sincronizar esta nueva etapa {dataNidos?.estadio}
                     </Text>
                   )}
                 </>
               ) : dataNidos ? (
                 <>
-                  <Text style={styles.textSubTitle}>
-                    ¡Se cargó exitosamente tu nido en la app, felicitaciones!
-                  </Text>
-                  {dataNidos?.estadio !== 4 && (
+                  {isConnected ? (
+                    <>
+                      <Text style={styles.textSubTitle}>
+                        ¡Se cargó exitosamente tu nido en la app, felicitaciones!
+                      </Text>
+                      {dataNidos?.estadio !== 4 && (
+                        <Text style={styles.textSubTitle}>
+                          Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+                        </Text>
+                      )}
+                    </>
+                  ) : (
                     <Text style={styles.textSubTitle}>
-                      Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+                      Cuando se reestablezca la conexión a internet vas a poder sincronizar este nuevo nido
                     </Text>
                   )}
                 </>
