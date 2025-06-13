@@ -250,6 +250,7 @@ export default function NavConfig() {
           options={{
             headerShown: true,
             headerTitle: false,
+            title: null,
             headerTitleAlign: 'center',
             headerTransparent: 'true',
             headerBackTitle: 'Atrás',
