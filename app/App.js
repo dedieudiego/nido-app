@@ -114,17 +114,19 @@ export default function App() {
 
   useEffect(() => {
     console.log("REFRESH");
-    DeviceStorage.getItem('nests').then((res) => {
-      let nests = JSON.parse(res)
-      console.log("NESTS", nests);
-
-      if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
-        setPendingNests(nests);
-      } else {
-        setPendingNests(null);
-      }
-    })
-    setRefreshStorage(false);
+    setTimeout(() => {
+      DeviceStorage.getItem('nests').then((res) => {
+        let nests = JSON.parse(res)
+        console.log("NESTS", nests);
+  
+        if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
+          setPendingNests(nests);
+        } else {
+          setPendingNests(null);
+        }
+      })
+      setRefreshStorage(false);
+    }, 2000)
   }, [refreshStorage])
 
   if (!fontsLoaded) {

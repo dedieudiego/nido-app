@@ -65,7 +65,6 @@ export default function EndReport({navigation, route}) {
 
     if (error) {
       console.log("ERROR", error);
-      setLoading(false);
     } else {
       const { data: location, error: locationError } = await supabase.from('locations').insert({
         city: dataNidos.ubicacion.city,
@@ -86,9 +85,9 @@ export default function EndReport({navigation, route}) {
         })
         if (stepError) console.log("ERROR", stepError);
         setDataNidos(false);
-        setLoading(false);
       }
     };
+    setLoading(false);
   };
 
   const syncNest = async(nest) => {
@@ -106,7 +105,6 @@ export default function EndReport({navigation, route}) {
     }).select()
 
     if (error) {
-      setLoading(false);
       console.log("ERROR", error);
     } else {
       if (nest.location) {
@@ -126,10 +124,7 @@ export default function EndReport({navigation, route}) {
           nest_id: nest.update || data[0].id,
           location_id: location[0].id
         })
-        if (stepError) {
-          console.log("ERROR", stepError);
-          setLoading(false);
-        }
+        if (stepError) console.log("ERROR", stepError);
       } else {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
@@ -137,9 +132,9 @@ export default function EndReport({navigation, route}) {
           nest_id: nest.update || data[0].id
         })
         if (stepError) console.log("ERROR", stepError);
-        setLoading(false);
       }
     };
+    setLoading(false);
   };
 
   const saveNest = (step) => {
