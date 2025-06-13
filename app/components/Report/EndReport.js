@@ -1,5 +1,5 @@
-import React, {useEffect, useContext} from 'react'
-import {StyleSheet, View, Text, ScrollView, Image, TouchableOpacity} from 'react-native'
+import React, {useEffect, useContext, useState} from 'react'
+import {StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
 import Constants from 'expo-constants'
 import {FontAwesome} from '@expo/vector-icons'
 import AppStateContext from '../Shared/AppStateContext'
@@ -17,6 +17,7 @@ const theMargin = Constants.statusBarHeight + 60
 
 export default function EndReport({navigation, route}) {
   const {currentUser, dataNidos, updateDataNidos, isConnected, setRefreshStorage} = useContext(AppStateContext)
+  const [loading, setLoading] = useState(false);
   const { navigate } = navigation;
 
   console.log("isConnected", isConnected);
@@ -44,6 +45,8 @@ export default function EndReport({navigation, route}) {
 
   const createNest = async(step) => {
     console.log("NIDO", dataNidos)
+    setLoading(true);
+    
     const image = await uploadImageToSupabase(dataNidos.photo.uri)
     
     const { data, error } = updateDataNidos 
@@ -56,6 +59,7 @@ export default function EndReport({navigation, route}) {
 
     if (error) {
       console.log("ERROR", error);
+      setLoading(false);
     } else {
       const { data: location, error: locationError } = await supabase.from('locations').insert({
         city: dataNidos.ubicacion.city,
@@ -76,12 +80,15 @@ export default function EndReport({navigation, route}) {
           location_id: location[0].id
         })
         if (stepError) console.log("ERROR", stepError);
+        setLoading(false);
       }
     };
   };
 
   const syncNest = async(nest) => {
     console.log("SYNCING", nest);
+    setLoading(true);
+
     const { step } = nest;
     const image = await uploadImageToSupabase(nest.image)
     
@@ -94,6 +101,7 @@ export default function EndReport({navigation, route}) {
     }).select()
 
     if (error) {
+      setLoading(false);
       console.log("ERROR", error);
     } else {
       if (nest.location) {
@@ -113,7 +121,10 @@ export default function EndReport({navigation, route}) {
           nest_id: nest.update ?? data[0].id,
           location_id: location[0].id
         })
-        if (stepError) console.log("ERROR", stepError);
+        if (stepError) {
+          console.log("ERROR", stepError);
+          setLoading(false);
+        }
       } else {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
@@ -121,11 +132,14 @@ export default function EndReport({navigation, route}) {
           nest_id: nest.update ?? data[0].id
         })
         if (stepError) console.log("ERROR", stepError);
+        setLoading(false);
       }
     };
   };
 
   const saveNest = (step) => {
+    setLoading(true);
+
     const nest = {
       image: dataNidos.photo.uri,
       step,
@@ -146,6 +160,7 @@ export default function EndReport({navigation, route}) {
       } else {
         DeviceStorage.saveItem('nests', JSON.stringify([nest]))
       }
+      setLoading(false);
     })
     
   }
@@ -194,70 +209,79 @@ export default function EndReport({navigation, route}) {
   return (
     <ScrollView style={{marginTop: theMargin}}>
       <View style={styles.vwScreen}>
-        <View style={{flex: 1}}>
-          <Text style={styles.textTitle}>¡Excelente!</Text>
-          {updateDataNidos ? (
-            <>
-              <Text style={styles.textSubTitle}>
-                ¡Se cargo exitosamente la etapa {dataNidos?.estadio}, felicitaciones!
-              </Text>
-              {dataNidos?.estadio !== 4 ? (
-                <Text style={styles.textSubTitle}>
-                  Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
-                </Text>
+        {!loading ? (
+          <>
+            <View style={{flex: 1}}>
+              <Text style={styles.textTitle}>¡Excelente!</Text>
+              {updateDataNidos ? (
+                <>
+                  <Text style={styles.textSubTitle}>
+                    ¡Se cargo exitosamente la etapa {dataNidos?.estadio}, felicitaciones!
+                  </Text>
+                  {dataNidos?.estadio !== 4 ? (
+                    <Text style={styles.textSubTitle}>
+                      Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+                    </Text>
+                  ) : (
+                    <Text style={styles.textSubTitle}>
+                      Te agradecemos el seguimiento del nido.
+                      Esperamos que pronto encuentres otro nido que cargar.
+                    </Text>
+                  )}
+                </>
+              ) : dataNidos ? (
+                <>
+                  <Text style={styles.textSubTitle}>
+                    ¡Se cargó exitosamente tu nido en la app, felicitaciones!
+                  </Text>
+                  {dataNidos?.estadio !== 4 && (
+                    <Text style={styles.textSubTitle}>
+                      Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+                    </Text>
+                  )}
+                </>
               ) : (
-                <Text style={styles.textSubTitle}>
-                  Te agradecemos el seguimiento del nido.
-                  Esperamos que pronto encuentres otro nido que cargar.
-                </Text>
+                <>
+                  <Text style={styles.textSubTitle}>
+                    ¡Se sincronizaron exitosamente tus nidos en la app, felicitaciones!
+                  </Text>
+                  <Text style={{...styles.textSubTitle, marginBottom: 30}}>
+                    Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
+                  </Text>
+                </>
               )}
-            </>
-          ) : dataNidos ? (
-            <>
-              <Text style={styles.textSubTitle}>
-                ¡Se cargó exitosamente tu nido en la app, felicitaciones!
-              </Text>
-              {dataNidos?.estadio !== 4 && (
-                <Text style={styles.textSubTitle}>
-                  Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
-                </Text>
+            </View>
+
+            <View style={styles.vwMain}>
+              {dataNidos?.estadio === 1 && (
+                <Image source={hornero_etapa1} style={styles.imageHornero} />
               )}
-            </>
-          ) : (
-            <>
-              <Text style={styles.textSubTitle}>
-                ¡Se sincronizaron exitosamente tus nidos en la app, felicitaciones!
-              </Text>
-              <Text style={{...styles.textSubTitle, marginBottom: 30}}>
-                Recordá continuar el seguimiento de tu nido. ¡Muchas gracias!
-              </Text>
-            </>
-          )}
-        </View>
+              {dataNidos?.estadio === 2 && (
+                <Image source={hornero_etapa2} style={styles.imageHornero} />
+              )}
+              {dataNidos?.estadio === 3 && (
+                <Image source={hornero_etapa3} style={styles.imageHornero} />
+              )}
+              {dataNidos?.estadio === 4 && (
+                <Image source={hornero_etapa4} style={styles.imageHornero} />
+              )}
 
-        <View style={styles.vwMain}>
-          {dataNidos?.estadio === 1 && (
-            <Image source={hornero_etapa1} style={styles.imageHornero} />
-          )}
-          {dataNidos?.estadio === 2 && (
-            <Image source={hornero_etapa2} style={styles.imageHornero} />
-          )}
-          {dataNidos?.estadio === 3 && (
-            <Image source={hornero_etapa3} style={styles.imageHornero} />
-          )}
-          {dataNidos?.estadio === 4 && (
-            <Image source={hornero_etapa4} style={styles.imageHornero} />
-          )}
-
-          <TouchableOpacity
-            style={styles.btnMarron}
-            onPress={() => {
-              navigate('Inicio')
-            }}>
-            <FontAwesome name='home' style={{color: '#FFFFFF', fontSize: 20, marginEnd: 10}} />
-            <Text style={styles.btnMarronText}>VOLVER AL HOME</Text>
-          </TouchableOpacity>
-        </View>
+              <TouchableOpacity
+                style={styles.btnMarron}
+                onPress={() => {
+                  navigate('Inicio')
+                }}>
+                <FontAwesome name='home' style={{color: '#FFFFFF', fontSize: 20, marginEnd: 10}} />
+                <Text style={styles.btnMarronText}>VOLVER AL HOME</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <View style={{flex: 1}}>
+            <Text style={styles.textTitle}>Espera mientras se guarda tu nido...</Text>
+            <ActivityIndicator size="large" color="#CD8C59" style={{marginTop: 30}} />
+          </View>
+        )}
       </View>
     </ScrollView>
   )
