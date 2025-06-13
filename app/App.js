@@ -99,7 +99,6 @@ export default function App() {
 
         DeviceStorage.getItem('nests').then((res) => {
           let nests = JSON.parse(res)
-          console.log("NESTS", nests)
 
           if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
             setPendingNests(nests);
@@ -112,15 +111,12 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    console.log("REFRESH");
     DeviceStorage.getItem('nests').then((res) => {
       let nests = JSON.parse(res)
 
       if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
-        console.log("FULL");
         setPendingNests(nests);
       } else {
-        console.log("EMPTY")
         setPendingNests(null);
       }
     })

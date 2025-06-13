@@ -51,7 +51,6 @@ export default function EndReport({navigation, route}) {
   }
 
   const createNest = async(step) => {
-    console.log("NIDO", dataNidos)
     setLoading(true);
     
     const image = await uploadImageToSupabase(dataNidos.photo.uri)
@@ -79,7 +78,6 @@ export default function EndReport({navigation, route}) {
       }).select()
 
       if (location?.length && !locationError) {
-        console.log("STEP", step);
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
@@ -94,7 +92,6 @@ export default function EndReport({navigation, route}) {
   };
 
   const syncNest = async(nest) => {
-    console.log("SYNCING", nest);
     setLoading(true);
 
     const { step } = nest;
@@ -175,7 +172,6 @@ export default function EndReport({navigation, route}) {
   }
 
   useEffect(() => {
-    console.log({dataNidos});
     if (dataNidos) {
       const nestStep = {
         profile_id: currentUser.profile.id,
@@ -194,14 +190,11 @@ export default function EndReport({navigation, route}) {
       DeviceStorage.getItem('nests').then((savedNests) => {
         if (savedNests) {
           const parsedNests = JSON.parse(savedNests);
-          console.log({
-            parsedNests
-          })
+
           if (parsedNests?.length) {
             parsedNests
               .filter((nest) => nest.step.profile_id === currentUser.profile.id)
               .forEach(async (nest) => {
-                console.log("THIS NEST", nest);
                 await syncNest(nest);
               })
             const rest = parsedNests
