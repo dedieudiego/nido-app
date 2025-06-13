@@ -8,5 +8,7 @@ const AppStateContext = createContext({
   setDataNidos: () => {},
   updateDataNidos: {},
   setUpdateDataNidos: () => {},
+  pendingNests: {},
+  setPendingNests: () => {},
 })
 export default AppStateContext

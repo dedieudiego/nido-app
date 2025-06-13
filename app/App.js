@@ -22,6 +22,7 @@ export default function App() {
   const [dataNidos, setDataNidos] = useState(null)
   const [updateDataNidos, setUpdateDataNidos] = useState(false)
   const [refreshStorage, setRefreshStorage] = useState(false);
+  const [pendingNests, setPendingNests] = useState(false);
 
   const value = {
     currentUser,
@@ -33,7 +34,9 @@ export default function App() {
     updateDataNidos,
     setUpdateDataNidos,
     refreshStorage,
-    setRefreshStorage
+    setRefreshStorage,
+    pendingNests,
+    setPendingNests
   }
 
   let [fontsLoaded] = useFonts({
@@ -44,7 +47,6 @@ export default function App() {
   })
 
   const [session, setSession] = useState(null)
-  const [pendingNests, setPendingNests] = useState(null)
 
   const isIOS = Platform.OS === 'ios';
   const isAndroid = Platform.OS === 'android';
@@ -111,8 +113,10 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    console.log("REFRESH");
     DeviceStorage.getItem('nests').then((res) => {
       let nests = JSON.parse(res)
+      console.log("NESTS", nests);
 
       if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
         setPendingNests(nests);

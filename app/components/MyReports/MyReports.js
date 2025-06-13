@@ -8,7 +8,7 @@ import { supabase } from '../../lib/supabase'
 import hornero_etapa2 from '../../components/assets/Nidos/formulario/etapa1/q1/HORNERO-VECTOR-05.png'
 
 export default function MyReports({navigation}) {
-  const {currentUser, setUpdateDataNidos, isConnected} = useContext(AppStateContext)
+  const {currentUser, setUpdateDataNidos, isConnected, pendingNests} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
 
@@ -66,6 +66,8 @@ export default function MyReports({navigation}) {
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>Mis nidos en construcción</Text>
           </View>
+          
+          {pendingNests?.length && <Text style={styles.pendingText}>Tienes cambios pendientes para sincronizar cuando se reestablezca la conexión a internet</Text>}
 
           {loading && <ActivityIndicator size="large" color="#CD8C59" />}
           {!loading && data?.map((item) => 
@@ -125,4 +127,13 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontFamily: 'Roboto_700Bold',
   },
+  pendingText: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 16,
+    backgroundColor: '#eee',
+    padding: 8,
+    borderRadius: 8,
+    textAlign: 'center'
+  }
 })

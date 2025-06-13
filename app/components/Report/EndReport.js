@@ -210,6 +210,7 @@ export default function EndReport({navigation, route}) {
         }
       })
     }
+    console.log("SET REFRESH");
     setRefreshStorage(true);
   }, [])
 
@@ -354,6 +355,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    marginTop: 10,
   },
   btnMarronText: {
     color: '#FFFFFF',

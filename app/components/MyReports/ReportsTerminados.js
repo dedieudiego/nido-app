@@ -8,7 +8,7 @@ import { supabase } from '../../lib/supabase'
 import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etapa4/HORNERO-VECTOR-13.png'
 
 export default function ReportsTerminados({navigation}) {
-  const {currentUser, isConnected} = useContext(AppStateContext)
+  const {currentUser, isConnected, pendingNests} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -61,6 +61,8 @@ export default function ReportsTerminados({navigation}) {
             <Text style={styles.titleText}>Mis nidos terminados</Text>
           </View>
 
+          {pendingNests?.length && <Text style={styles.pendingText}>Tienes cambios pendientes para sincronizar cuando se reestablezca la conexión a internet</Text>}
+
           {loading && <ActivityIndicator size="large" color="#CD8C59" />}
           {!loading && data?.map((item) => 
             <View key={item.id}>
@@ -105,4 +107,13 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontFamily: 'Roboto_700Bold',
   },
+  pendingText: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 16,
+    backgroundColor: '#eee',
+    padding: 8,
+    borderRadius: 8,
+    textAlign: 'center'
+  }
 })
