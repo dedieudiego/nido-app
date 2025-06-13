@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { StatusBar } from 'react-native';
 import NavConfig from './components/Config/NavConfig'
 import AppStateContext from './components/Shared/AppStateContext'
 import {
@@ -139,10 +140,11 @@ export default function App() {
 
   return (
     <AppStateContext.Provider value={value}>
-      {!isConnected && <View style={{...styles.warning, marginTop: isIOS ? 60 : 30}}>
+      <StatusBar backgroundColor="transparent" barStyle="dark-content" />
+      {!isConnected && <View style={{...styles.warning, marginTop: isIOS ? 60 : 0}}>
         <Text style={{textAlign: 'center'}}>No tienes conexión a internet</Text>  
       </View>}
-      {isConnected && pendingNests?.length && <TouchableOpacity onPress={syncNests} style={styles.pendingNests}>
+      {isConnected && pendingNests?.length && <TouchableOpacity onPress={syncNests} style={{...styles.pendingNests, marginTop: isIOS ? 60 : 0}}>
         <Text style={styles.btnGeneralText}>Tienes nidos para sincronizar, haz click aquí</Text>  
       </TouchableOpacity>}
       <NavConfig />
@@ -170,8 +172,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 6,
     backgroundColor: '#57AAF2',
-    zIndex: 9,
-    marginTop: 60
+    zIndex: 9
   },
   btnGeneralText: {
     color: '#FFFFFF',
