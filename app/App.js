@@ -92,7 +92,6 @@ export default function App() {
 
   //USER DATA INITILIZATION
   useEffect(() => {
-    console.log("CHECK");
     DeviceStorage.getItem('userPersistance').then((res) => {
       let user = JSON.parse(res)
       
@@ -102,7 +101,6 @@ export default function App() {
         } else setCurrentUser(user)
 
         DeviceStorage.getItem('nests').then((res) => {
-          console.log("RES", res);
           let nests = JSON.parse(res)
 
           if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
@@ -119,8 +117,7 @@ export default function App() {
     if (currentUser) {
       setTimeout(() => {
         DeviceStorage.getItem('nests').then((res) => {
-          let nests = JSON.parse(res)
-          console.log("NESTS", nests);
+          let nests = JSON.parse(res);
     
           if (nests?.length && nests.some((nest) => nest.step.profile_id === currentUser.profile.id)) {
             setPendingNests(nests);

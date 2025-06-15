@@ -165,7 +165,6 @@ export default function EndReport({navigation, route}) {
   }
 
   useEffect(() => {
-    console.log("DATA NIDOS", dataNidos);
     if (dataNidos) {
       const nestStep = {
         profile_id: currentUser.profile.id,

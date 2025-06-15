@@ -10,7 +10,7 @@ dist/
 # Mobile
 ios/
 android/
-.google-services.json
+google-services.json
 
 # Compiled Java class files
 *.class
