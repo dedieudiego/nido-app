@@ -4,7 +4,7 @@ import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import hornero_q3 from '../../components/assets/Nidos/formulario/etapa1/q3/AGUA-VECTOR-08.png'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function ThirdStepReport({navigation, route}) {
   const {dataNidos, setDataNidos} = useContext(AppStateContext)
 

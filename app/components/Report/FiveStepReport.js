@@ -18,7 +18,7 @@ import BtnGeneral from './BtnGeneral'
 
 import * as Location from 'expo-location'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function FiveStepReport({navigation, route}) {
   const {currentUser, dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [location, setLocation] = useState(null)

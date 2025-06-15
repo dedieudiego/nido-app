@@ -5,7 +5,7 @@ import AppStateContext from '../Shared/AppStateContext'
 import hornero_q2 from '../../components/assets/Nidos/formulario/etapa1/q2/HORNERO-VECTOR-06.png'
 import BtnGeneral from './BtnGeneral'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function SecondStepReport({navigation}) {
   const {dataNidos, setDataNidos} = useContext(AppStateContext)
 

@@ -69,7 +69,7 @@ export default function ReportIntro({navigation, route}) {
 
 const styles = StyleSheet.create({
   vwMain: {
-    marginTop: Constants.statusBarHeight + 60,
+    marginTop: Constants.statusBarHeight + 30,
     marginBottom: 40,
   },
   textTitle: {

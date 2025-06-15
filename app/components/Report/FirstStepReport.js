@@ -8,7 +8,7 @@ import hornero_etapa3 from '../../components/assets/Nidos/formulario/etapa1/etap
 import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etapa4/HORNERO-VECTOR-13.png'
 import BtnGeneral from './BtnGeneral'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function FirstStepReport({navigation}) {
   const {dataNidos, setDataNidos} = useContext(AppStateContext)
 

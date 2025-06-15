@@ -84,7 +84,6 @@ export default function EndReport({navigation, route}) {
           location_id: location[0].id
         })
         if (stepError) console.log("ERROR", stepError);
-        setDataNidos(false);
       }
     };
     setLoading(false);
@@ -161,12 +160,12 @@ export default function EndReport({navigation, route}) {
         DeviceStorage.saveItem('nests', JSON.stringify([nest]))
       }
       setLoading(false);
-      setDataNidos(false);
     })
     
   }
 
   useEffect(() => {
+    console.log("DATA NIDOS", dataNidos);
     if (dataNidos) {
       const nestStep = {
         profile_id: currentUser.profile.id,
@@ -288,7 +287,9 @@ export default function EndReport({navigation, route}) {
               <TouchableOpacity
                 style={styles.btnMarron}
                 onPress={() => {
-                  navigate('Inicio')
+                  setDataNidos(false);
+                  setRefreshStorage(true);
+                  navigate('Inicio');
                 }}>
                 <FontAwesome name='home' style={{color: '#FFFFFF', fontSize: 20, marginEnd: 10}} />
                 <Text style={styles.btnMarronText}>VOLVER AL HOME</Text>

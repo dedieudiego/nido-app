@@ -5,7 +5,7 @@ import ModalCancel from '../Shared/ModalCancel'
 import photo from '../../components/assets/Nidos/formulario/etapa1/q6/photo.png'
 import BtnGeneral from './BtnGeneral'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function PhotoBelow({navigation}) {
   const [cancelModal, setCancelModal] = useState(false)
   useEffect(() => {

@@ -5,7 +5,7 @@ import AppStateContext from '../Shared/AppStateContext'
 import hornero_der from '../../components/assets/Nidos/formulario/etapa1/q8/der/HORNERO-VECTOR-07.png'
 import hornero_izq from '../../components/assets/Nidos/formulario/etapa1/q8/izq/HORNERO-VECTOR-07.png'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function SevenStepReport({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
 

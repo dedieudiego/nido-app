@@ -15,7 +15,7 @@ import btnCerrar from '../assets/btnCerrar.png'
 import AppStateContext from '../Shared/AppStateContext'
 import * as Location from 'expo-location'
 
-const theMargin = Constants.statusBarHeight + 50
+const theMargin = Constants.statusBarHeight + 20
 export default function CameraBelow({navigation}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [cameraRef, setCameraRef] = useState(null)

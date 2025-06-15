@@ -92,6 +92,7 @@ export default function App() {
 
   //USER DATA INITILIZATION
   useEffect(() => {
+    console.log("CHECK");
     DeviceStorage.getItem('userPersistance').then((res) => {
       let user = JSON.parse(res)
       
@@ -101,6 +102,7 @@ export default function App() {
         } else setCurrentUser(user)
 
         DeviceStorage.getItem('nests').then((res) => {
+          console.log("RES", res);
           let nests = JSON.parse(res)
 
           if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
@@ -114,20 +116,21 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    console.log("REFRESH");
-    setTimeout(() => {
-      DeviceStorage.getItem('nests').then((res) => {
-        let nests = JSON.parse(res)
-        console.log("NESTS", nests);
-  
-        if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
-          setPendingNests(nests);
-        } else {
-          setPendingNests(null);
-        }
-      })
-      setRefreshStorage(false);
-    }, 2000)
+    if (currentUser) {
+      setTimeout(() => {
+        DeviceStorage.getItem('nests').then((res) => {
+          let nests = JSON.parse(res)
+          console.log("NESTS", nests);
+    
+          if (nests?.length && nests.some((nest) => nest.step.profile_id === currentUser.profile.id)) {
+            setPendingNests(nests);
+          } else {
+            setPendingNests(null);
+          }
+        })
+        setRefreshStorage(false);
+      }, 2000)
+    }
   }, [refreshStorage])
 
   if (!fontsLoaded) {

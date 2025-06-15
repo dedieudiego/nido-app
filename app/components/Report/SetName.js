@@ -4,7 +4,7 @@ import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import BtnGeneral from './BtnGeneral'
 
-const theMargin = Constants.statusBarHeight + 60
+const theMargin = Constants.statusBarHeight + 30
 export default function SetName({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [name, setName] = useState(dataNidos.ubicacion?.city);
