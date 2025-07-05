@@ -38,7 +38,9 @@ export default function App() {
     refreshStorage,
     setRefreshStorage,
     pendingNests,
-    setPendingNests
+    setPendingNests,
+    syncing,
+    setSyncing
   }
 
   let [fontsLoaded] = useFonts({

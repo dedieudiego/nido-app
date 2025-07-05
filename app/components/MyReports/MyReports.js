@@ -8,13 +8,15 @@ import { supabase } from '../../lib/supabase'
 import hornero_etapa2 from '../../components/assets/Nidos/formulario/etapa1/q1/HORNERO-VECTOR-05.png'
 
 export default function MyReports({navigation}) {
-  const {currentUser, setUpdateDataNidos, isConnected, pendingNests} = useContext(AppStateContext)
+  const {currentUser, setUpdateDataNidos, isConnected, pendingNests, syncing, setSyncing} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true);
 
+  const { navigate } = navigation;
+
   const continueReports = (item) => {
     setUpdateDataNidos(true)
-    navigation.navigate('Report', {item})
+    navigate('Report', {item})
   }
 
   const getData = async() => {
@@ -53,6 +55,13 @@ export default function MyReports({navigation}) {
       }
     }
   }
+  
+  const syncNests = () => {
+    if (!syncing) {
+      setSyncing(true);
+      navigate('EndReport');
+    };
+  }
 
   useEffect(() => {
     getData()
@@ -67,7 +76,11 @@ export default function MyReports({navigation}) {
             <Text style={styles.titleText}>Mis nidos en construcción</Text>
           </View>
           
-          {pendingNests?.length && <Text style={styles.pendingText}>Tienes cambios pendientes para sincronizar cuando se reestablezca la conexión a internet</Text>}
+          {pendingNests?.length && (
+            <TouchableOpacity disabled={!isConnected} onPress={syncNests}>
+              <Text style={{...styles.pendingText, backgroundColor: isConnected ? '#57AAF2' : '#eee', color: isConnected ? '#fff' : '#666'}}>Tienes cambios pendientes para sincronizar cuando se reestablezca la conexión a internet</Text>
+            </TouchableOpacity>
+          )}
 
           {loading && <ActivityIndicator size="large" color="#CD8C59" />}
           {!loading && data?.map((item) => 
@@ -129,9 +142,7 @@ const styles = StyleSheet.create({
   },
   pendingText: {
     fontSize: 12,
-    color: '#666',
     marginBottom: 16,
-    backgroundColor: '#eee',
     padding: 8,
     borderRadius: 8,
     textAlign: 'center'
