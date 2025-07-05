@@ -109,6 +109,7 @@ export default function App() {
 
           if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
             setPendingNests(nests);
+            setSyncing(false);
           } else {
             setPendingNests(null);
           }

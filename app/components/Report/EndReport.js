@@ -52,6 +52,7 @@ export default function EndReport({navigation, route}) {
 
   const createNest = async(step) => {
     setLoading(true);
+    console.log("STEP", step);
     
     const image = await uploadImageToSupabase(dataNidos.photo.uri)
     
@@ -66,26 +67,39 @@ export default function EndReport({navigation, route}) {
     if (error) {
       console.log("ERROR", error);
     } else {
-      const { data: location, error: locationError } = await supabase.from('locations').insert({
-        city: dataNidos.ubicacion.city,
-        country: dataNidos.ubicacion.country,
-        postal_code: dataNidos.ubicacion.postalCode,
-        latitude: dataNidos.ubicacion.latitude,
-        longitude: dataNidos.ubicacion.longitude,
-        region: dataNidos.ubicacion.region,
-        subregion: dataNidos.ubicacion.subregion,
-      }).select()
+      console.log("DATA", data);
+      if (dataNidos.ubicacion) {
+        const { data: location, error: locationError } = await supabase.from('locations').insert({
+          city: dataNidos.ubicacion.city,
+          country: dataNidos.ubicacion.country,
+          postal_code: dataNidos.ubicacion.postalCode,
+          latitude: dataNidos.ubicacion.latitude,
+          longitude: dataNidos.ubicacion.longitude,
+          region: dataNidos.ubicacion.region,
+          subregion: dataNidos.ubicacion.subregion,
+        }).select()
 
-      if (location?.length && !locationError) {
+        if (location?.length && !locationError) {
+          const { error: stepError } = await supabase.from('nests_steps').insert({
+            ...step,
+            image: image.fullPath,
+            nest_id: updateDataNidos ? dataNidos.id : data[0].id,
+            location_id: location[0].id
+          })
+          if (stepError) console.log("ERROR", stepError);
+        } else if (locationError) {
+          console.log("LOCATION ERROR", locationError);
+        }
+      } else {
         const { error: stepError } = await supabase.from('nests_steps').insert({
           ...step,
           image: image.fullPath,
-          nest_id: updateDataNidos ? dataNidos.id : data[0].id,
-          location_id: location[0].id
+          nest_id: updateDataNidos ? dataNidos.id : data[0].id
         })
         if (stepError) console.log("ERROR", stepError);
       }
     };
+    console.log("LOADING FALSE");
     setLoading(false);
   };
 
@@ -176,6 +190,11 @@ export default function EndReport({navigation, route}) {
         type_of_source: dataNidos.tipoDeFuente,
         entry: dataNidos.nido
       }
+
+      console.log({
+        dataNidos,
+        nestStep
+      })
     
       if (isConnected) createNest(nestStep);
       else saveNest(nestStep)
