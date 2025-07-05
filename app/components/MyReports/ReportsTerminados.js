@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {StyleSheet, View, Text, ScrollView, Image, ActivityIndicator} from 'react-native'
+import {StyleSheet, View, Text, ScrollView, Image, ActivityIndicator, TouchableOpacity} from 'react-native'
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import CardReport from './CardReport'
@@ -8,9 +8,11 @@ import { supabase } from '../../lib/supabase'
 import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etapa4/HORNERO-VECTOR-13.png'
 
 export default function ReportsTerminados({navigation}) {
-  const {currentUser, isConnected, pendingNests} = useContext(AppStateContext)
+  const {currentUser, isConnected, pendingNests, syncing, setSyncing} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const { navigate } = navigation;
 
   const getData = async() => {
     if (isConnected) {
@@ -48,6 +50,13 @@ export default function ReportsTerminados({navigation}) {
     }
   }
 
+  const syncNests = () => {
+    if (!syncing) {
+      setSyncing(true);
+      navigate('EndReport');
+    };
+  }
+
   useEffect(() => {
     if (currentUser.profile) getData()
   }, [currentUser])
@@ -61,7 +70,11 @@ export default function ReportsTerminados({navigation}) {
             <Text style={styles.titleText}>Mis nidos terminados</Text>
           </View>
 
-          {pendingNests?.length && <Text style={styles.pendingText}>Tienes cambios pendientes para sincronizar cuando se reestablezca la conexión a internet</Text>}
+          {pendingNests?.length && (
+            <TouchableOpacity disabled={!isConnected} onPress={syncNests}>
+              <Text style={{...styles.pendingText, backgroundColor: isConnected ? '#57AAF2' : '#eee', color: isConnected ? '#fff' : '#666'}}>Tienes cambios pendientes para sincronizar cuando se reestablezca la conexión a internet</Text>
+            </TouchableOpacity>
+          )}
 
           {loading && <ActivityIndicator size="large" color="#CD8C59" />}
           {!loading && data?.map((item) => 
@@ -109,9 +122,7 @@ const styles = StyleSheet.create({
   },
   pendingText: {
     fontSize: 12,
-    color: '#666',
     marginBottom: 16,
-    backgroundColor: '#eee',
     padding: 8,
     borderRadius: 8,
     textAlign: 'center'
