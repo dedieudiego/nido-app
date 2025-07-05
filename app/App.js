@@ -24,6 +24,7 @@ export default function App() {
   const [updateDataNidos, setUpdateDataNidos] = useState(false)
   const [refreshStorage, setRefreshStorage] = useState(false);
   const [pendingNests, setPendingNests] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   const value = {
     currentUser,
@@ -68,7 +69,10 @@ export default function App() {
   }
 
   const syncNests = () => {
-    navigate('EndReport')
+    if (!syncing) {
+      setSyncing(true);
+      navigate('EndReport')
+    };
   }
 
   useEffect(() => {
@@ -144,7 +148,7 @@ export default function App() {
       {!isConnected && <View style={{...styles.warning, marginTop: isIOS ? 60 : 0}}>
         <Text style={{textAlign: 'center'}}>No tienes conexión a internet</Text>  
       </View>}
-      {isConnected && pendingNests?.length && <TouchableOpacity onPress={syncNests} style={{...styles.pendingNests, marginTop: isIOS ? 60 : 0}}>
+      {isConnected && pendingNests?.length && <TouchableOpacity disabled={syncing} onPress={syncNests} style={{...styles.pendingNests, marginTop: isIOS ? 60 : 0, opacity: syncing ? 0.5 : 1}}>
         <Text style={styles.btnGeneralText}>Tienes nidos para sincronizar, haz click aquí</Text>  
       </TouchableOpacity>}
       <NavConfig />
