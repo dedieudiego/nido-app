@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useRef } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import DeviceStorage from './Shared/DeviceStorage'
 import Hornero from './assets/hornero.png'
@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons'
 import VersionAppText from './Shared/VersionAppText'
 import { supabase } from '../lib/supabase'
 import * as Linking from 'expo-linking';
+import * as Location from 'expo-location';
 
 export default function Home({ route, navigation }) {
   const { currentUser, setCurrentUser, setUpdateDataNidos } = useContext(AppStateContext)

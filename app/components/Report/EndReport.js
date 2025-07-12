@@ -77,6 +77,8 @@ export default function EndReport({navigation, route}) {
           longitude: dataNidos.ubicacion.longitude,
           region: dataNidos.ubicacion.region,
           subregion: dataNidos.ubicacion.subregion,
+          street: dataNidos.ubicacion.street,
+          number: dataNidos.ubicacion.number,
         }).select()
 
         if (location?.length && !locationError) {
@@ -129,6 +131,8 @@ export default function EndReport({navigation, route}) {
           longitude: nest.location.longitude,
           region: nest.location.region,
           subregion: nest.location.subregion,
+          street: nest.location.street,
+          number: nest.location.number,
         }).select()
   
         const { error: stepError } = await supabase.from('nests_steps').insert({

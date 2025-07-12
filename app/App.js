@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { StatusBar } from 'react-native';
 import NavConfig from './components/Config/NavConfig'
 import AppStateContext from './components/Shared/AppStateContext'
@@ -15,6 +15,7 @@ import Moment from 'moment/min/moment-with-locales'
 import { supabase } from './lib/supabase'
 import NetInfo from '@react-native-community/netinfo'
 import { navigate } from './components/Config/NavigationService'
+import * as Location from 'expo-location'
 
 export default function App() {
   // CONTEXT
@@ -25,6 +26,8 @@ export default function App() {
   const [refreshStorage, setRefreshStorage] = useState(false);
   const [pendingNests, setPendingNests] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [location, setLocation] = useState(false);
+  const watchId = useRef(null)
 
   const value = {
     currentUser,
@@ -40,8 +43,54 @@ export default function App() {
     pendingNests,
     setPendingNests,
     syncing,
-    setSyncing
+    setSyncing,
+    location
   }
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        console.log('Permiso denegado')
+        return
+      }
+
+      watchId.current = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.Highest,
+          timeInterval: 3000,
+          distanceInterval: 1,
+        },
+        async (location) => {
+          console.log("LOC", location);
+          if (location.coords) {
+            let geocode = await Location.reverseGeocodeAsync(location.coords)
+            console.log("LOCATION", geocode);
+      
+            const ubicacion = {
+              city: geocode[0].city,
+              country: geocode[0].country,
+              postalCode: geocode[0].postalCode,
+              region: geocode[0].region,
+              subregion: geocode[0].subregion,
+              street: geocode[0].street,
+              number: geocode[0].streetNumber,
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }
+            setLocation(ubicacion)
+          }
+        }
+      )
+    })()
+
+    // Limpieza cuando se desmonta el componente
+    return () => {
+      if (watchId.current) {
+        watchId.current.remove()
+      }
+    }
+  }, [])
 
   let [fontsLoaded] = useFonts({
     Roboto_400Regular,
@@ -128,6 +177,7 @@ export default function App() {
     
           if (nests?.length && nests.some((nest) => nest.step.profile_id === currentUser.profile.id)) {
             setPendingNests(nests);
+            syncNests();
           } else {
             setPendingNests(null);
           }
@@ -152,7 +202,7 @@ export default function App() {
         <Text style={{textAlign: 'center'}}>No tienes conexión a internet</Text>  
       </View>}
       {isConnected && pendingNests?.length && <TouchableOpacity disabled={syncing} onPress={syncNests} style={{...styles.pendingNests, marginTop: isIOS ? 60 : 0, opacity: syncing ? 0.5 : 1}}>
-        <Text style={styles.btnGeneralText}>Tienes nidos para sincronizar, haz click aquí</Text>  
+        <Text style={styles.btnGeneralText}>{syncing ? 'Sincronizando nidos...' : 'Tienes nidos para sincronizar, haz click aquí'}</Text>
       </TouchableOpacity>}
       <NavConfig />
     </AppStateContext.Provider>

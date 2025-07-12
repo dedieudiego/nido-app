@@ -25,7 +25,7 @@ export default function CardReport({ isComplete, data }) {
 
   return (
     <View style={styles.cardReport}>
-      <View style={{ paddingLeft: 26, flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ paddingLeft: 26, paddingRight: 120, flexDirection: 'row', alignItems: 'center' }}>
         <Text style={styles.titleReport}>
           Nido #{data.id} - {data?.name ?? "Sin nombre"}
         </Text>

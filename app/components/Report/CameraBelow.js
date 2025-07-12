@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, useRef} from 'react'
 import {
   StyleSheet,
   View,
@@ -7,43 +7,60 @@ import {
   TouchableOpacity,
   Image,
   Button,
+  PanResponder,
 } from 'react-native'
 import Constants from 'expo-constants'
 import {CameraView, useCameraPermissions} from 'expo-camera'
 import CameraControl from './CameraControl'
 import btnCerrar from '../assets/btnCerrar.png'
 import AppStateContext from '../Shared/AppStateContext'
-import * as Location from 'expo-location'
 
 const theMargin = Constants.statusBarHeight + 20
 export default function CameraBelow({navigation}) {
-  const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
-  const [cameraRef, setCameraRef] = useState(null)
+  const {dataNidos, setDataNidos, updateDataNidos, location} = useContext(AppStateContext)
+  const cameraRef = useRef(null);
   const [isCameraReady, setIsCameraReady] = useState(false)
 
   const [photoBelow, setPhotoBelow] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [location, setLocation] = useState(null)
+  const [zoom, setZoom] = useState(0);
   const [permission, requestPermission] = useCameraPermissions()
+  const prevDistanceRef = useRef(null);
 
-  useEffect(() => {
-    ;(async () => {
-      let location = await Location.getCurrentPositionAsync({})
-      let geocode = await Location.reverseGeocodeAsync(location.coords)
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: (_, gestureState) => {
+      return gestureState.numberActiveTouches === 2;
+    },
+    onPanResponderMove: (evt) => {
+      const touches = evt.nativeEvent.touches;
 
-      const ubicacion = {
-        city: geocode[0].city,
-        country: geocode[0].country,
-        postalCode: geocode[0].postalCode,
-        region: geocode[0].region,
-        subregion: geocode[0].subregion,
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+      if (touches.length === 2) {
+        const [touch1, touch2] = touches;
+        const dx = touch1.pageX - touch2.pageX;
+        const dy = touch1.pageY - touch2.pageY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        const prevDistance = prevDistanceRef.current;
+        if (prevDistance !== null) {
+          const delta = distance - prevDistance;
+
+          const sensitivity = 0.005;
+          let newZoom = zoom + delta * sensitivity;
+          newZoom = Math.min(Math.max(newZoom, 0), 1);
+          setZoom(newZoom);
+        }
+
+        prevDistanceRef.current = distance;
       }
-
-      setLocation(ubicacion)
-    })()
-  }, [])
+    },
+    onPanResponderRelease: () => {
+      prevDistanceRef.current = null;
+    },
+    onPanResponderTerminationRequest: () => true,
+    onPanResponderTerminate: () => {
+      prevDistanceRef.current = null;
+    },
+  });
 
   if (!permission) {
     return (
@@ -87,7 +104,7 @@ export default function CameraBelow({navigation}) {
 
   const takePicture = async () => {
     if (cameraRef) {
-      let photo = await cameraRef.takePictureAsync({
+      let photo = await cameraRef.current.takePictureAsync({
         quality: 0.5,
         skipProcessing: true,
         fixOrientation: false,
@@ -96,16 +113,15 @@ export default function CameraBelow({navigation}) {
     }
   }
 
-  return <View style={stylesCam.container}>
+  return <View style={stylesCam.container} {...panResponder.panHandlers}>
       <CameraView
         style={stylesCam.camera}
-        ref={(ref) => {
-          setCameraRef(ref)
-        }}
+        ref={cameraRef}
         onCameraReady={onCameraReady}
         onMountError={(error) => {
           console.log('cammera error', error)
         }}
+        zoom={zoom}
         facing={'back'}>
         <CameraControl isLoading={loading} onTakePicture={takePicture} />
       </CameraView>

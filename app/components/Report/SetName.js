@@ -7,7 +7,7 @@ import BtnGeneral from './BtnGeneral'
 const theMargin = Constants.statusBarHeight + 30
 export default function SetName({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
-  const [name, setName] = useState(dataNidos.ubicacion?.city);
+  const [name, setName] = useState(`${dataNidos.ubicacion?.city} ${dataNidos.ubicacion?.street ? `- ${dataNidos.ubicacion.street} ${dataNidos.ubicacion.number ?? ''}` : ''}`);
 
   const continueReport = () => {
     setDataNidos({...dataNidos, nombre: name})
