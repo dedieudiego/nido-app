@@ -286,7 +286,8 @@ export default function Login({route, navigation}) {
         <View style={styles.socialLogin}>
             <TouchableHighlight
               style={styles.btnSocial}
-              activeOpacity={1}
+              activeOpacity={0.5}
+              underlayColor='#ffffff'
               onPress={googleLogin}
             >
               <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>

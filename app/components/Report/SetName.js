@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {StyleSheet, View, Text, ScrollView, TextInput} from 'react-native'
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
@@ -7,12 +7,21 @@ import BtnGeneral from './BtnGeneral'
 const theMargin = Constants.statusBarHeight + 30
 export default function SetName({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
-  const [name, setName] = useState(`${dataNidos.ubicacion?.city} ${dataNidos.ubicacion?.street ? `- ${dataNidos.ubicacion.street} ${dataNidos.ubicacion.number ?? ''}` : ''}`);
+  const [name, setName] = useState("Nuevo nido");
 
   const continueReport = () => {
     setDataNidos({...dataNidos, nombre: name})
     navigation.navigate('EndReport');
   }
+
+  useEffect(() => {
+    let locationName = dataNidos.ubicacion?.city ?? 'Ciudad no encontrada';
+    if (dataNidos.ubicacion?.street) {
+      locationName += ` - ${dataNidos.ubicacion.street}`;
+      if (dataNidos.ubicacion?.number) locationName += ` ${dataNidos.ubicacion.number}`;
+    };
+    setName(locationName);
+  }, [dataNidos])
 
   return (
     <ScrollView style={{marginTop: theMargin}}>

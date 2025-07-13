@@ -161,6 +161,7 @@ export default function App() {
           if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
             setPendingNests(nests);
             setSyncing(false);
+            if (isConnected) syncNests();
           } else {
             setPendingNests(null);
           }
@@ -177,7 +178,7 @@ export default function App() {
     
           if (nests?.length && nests.some((nest) => nest.step.profile_id === currentUser.profile.id)) {
             setPendingNests(nests);
-            syncNests();
+            if (isConnected) syncNests();
           } else {
             setPendingNests(null);
           }
