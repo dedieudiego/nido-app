@@ -402,6 +402,7 @@ const styles = StyleSheet.create({
   vwBottom: {
     alignItems: 'center',
     justifyContent: 'flex-end',
+    paddingBottom: 30
   },
   socialLogin: {
     flexDirection: 'column',

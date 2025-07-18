@@ -318,5 +318,6 @@ const styles = StyleSheet.create({
   vwMain: {
     flex: 5,
     alignItems: 'center',
+    paddingBottom: 30
   },
 })
