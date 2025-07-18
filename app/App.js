@@ -161,14 +161,13 @@ export default function App() {
           if (nests?.length && nests.some((nest) => nest.step.profile_id === user.profile.id)) {
             setPendingNests(nests);
             setSyncing(false);
-            if (isConnected) syncNests();
           } else {
             setPendingNests(null);
           }
         })
       }
     })
-  }, [])
+  }, [isConnected])
 
   useEffect(() => {
     if (currentUser) {
@@ -178,7 +177,6 @@ export default function App() {
     
           if (nests?.length && nests.some((nest) => nest.step.profile_id === currentUser.profile.id)) {
             setPendingNests(nests);
-            if (isConnected) syncNests();
           } else {
             setPendingNests(null);
           }
@@ -187,6 +185,12 @@ export default function App() {
       }, 2000)
     }
   }, [refreshStorage])
+
+  useEffect(() => {
+    if (isConnected && pendingNests && !syncing) {
+      setTimeout(syncNests, 1000)
+    }
+  }, [isConnected, pendingNests])
 
   if (!fontsLoaded) {
     return (
