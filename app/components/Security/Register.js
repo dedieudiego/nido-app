@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: '3%',
     marginBottom: 20,
+    color: '#000000'
   },
   btnLogin: {
     backgroundColor: '#00D7A2',
