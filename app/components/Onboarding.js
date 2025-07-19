@@ -1,16 +1,19 @@
 import React from 'react'
-import {StyleSheet, View, Image} from 'react-native'
+import {StyleSheet, View, Image, Dimensions} from 'react-native'
 import DeviceStorage from './Shared/DeviceStorage'
 import Onboarding from 'react-native-onboarding-swiper'
 import onboarding1 from '../components/assets/Nidos/onboarding1.png'
 import onboarding2 from '../components/assets/Nidos/onboarding2.png'
 import onboarding3 from '../components/assets/Nidos/onboarding3.png'
 
+const { height } = Dimensions.get('window');
+
 export default function OnboardingScreen({navigation}) {
   const hideTutorial = () => {
     DeviceStorage.saveItem('hideTutorial', '1')
     navigation.navigate('Inicio')
   }
+
 
   return (
     <View style={styles.vwScreen}>
@@ -27,7 +30,7 @@ export default function OnboardingScreen({navigation}) {
               backgroundColor: '#fff',
               image: (
                 <View>
-                  <Image source={onboarding1} />
+                  <Image source={onboarding1} style={styles.imageHornero2} />
                 </View>
               ),
               title: '',
@@ -36,7 +39,7 @@ export default function OnboardingScreen({navigation}) {
             {
               backgroundColor: '#474E33',
               image: (
-                <Image style={{width: '60%'}} resizeMode='contain' source={onboarding2} />
+                <Image style={{...styles.imageHornero2, width: '60%'}} resizeMode='contain' source={onboarding2} />
               ),
               title: 'Encontrás un nido de hornero en construcción.',
               subtitle: 'Sacás el celular y registrás la etapa de construcción.',
@@ -50,7 +53,8 @@ export default function OnboardingScreen({navigation}) {
                     justifyContent: 'center',
                     alignContent: 'center',
                     alignItems: 'center',
-                  }}>
+                  }}
+                >
                   <Image source={onboarding3} style={styles.imageHornero2} />
                 </View>
               ),
@@ -75,6 +79,7 @@ const styles = StyleSheet.create({
   },
   vwOverMenu: {
     flex: 1,
+    backgroundColor: 'green',
   },
   vwMenu: {
     flex: 1,
@@ -118,8 +123,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   imageHornero2: {
-    height: 410,
+    height: height * 0.5,
+    maxHeight: 410,
     resizeMode: 'contain',
-    marginBottom: 20,
+    marginBottom: -70,
+    marginTop: -50
   },
 })

@@ -29,7 +29,7 @@ export default function Home({ route, navigation }) {
     })
 
     // HABILITAR EN CASO DE QUERER DEBUGGEAR
-    // navigate('Tutorial')
+    // navigate('Onboarding')
   }, [])
 
   useEffect(() => {
