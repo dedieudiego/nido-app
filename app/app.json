@@ -3,7 +3,7 @@
     "name": "Hornero",
     "slug": "hornero",
     "scheme": "com.nidohorneros",
-    "version": "1.7.4",
+    "version": "1.7.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -32,7 +32,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.nidohorneros",
-      "buildNumber": "1.7.4",
+      "buildNumber": "1.7.5",
       "supportsTablet": true,
       "usesAppleSignIn": false,
       "infoPlist": {
@@ -47,7 +47,7 @@
     },
     "android": {
       "package": "com.nidohorneros",
-      "versionCode": 22,
+      "versionCode": 23,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDa77R6XFPHLWEwoH-f6OEMxS2LjJHpM8Y"

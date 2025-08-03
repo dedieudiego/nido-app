@@ -1,17 +1,49 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {StyleSheet, View, Text, ScrollView, TextInput} from 'react-native'
+import {StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native'
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import BtnGeneral from './BtnGeneral'
+import * as Location from 'expo-location'
 
 const theMargin = Constants.statusBarHeight + 30
 export default function SetName({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [name, setName] = useState("Nuevo nido");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const continueReport = () => {
     setDataNidos({...dataNidos, nombre: name})
     navigation.navigate('EndReport');
+  }
+
+  const relocate = async () => {
+    setLoading(true);
+    const { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      console.log('Permiso denegado')
+      setError('Permiso para compartir ubicación denegado. Revisar permisos en los settings de tu celular')
+      return
+    };
+
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Highest,
+    })
+    let geocode = await Location.reverseGeocodeAsync(location.coords)
+
+    const ubicacion = {
+      city: geocode[0].city,
+      country: geocode[0].country,
+      postalCode: geocode[0].postalCode,
+      region: geocode[0].region,
+      subregion: geocode[0].subregion,
+      street: geocode[0].street,
+      number: geocode[0].streetNumber,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude
+    }
+    setDataNidos({...dataNidos, ubicacion})
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -39,6 +71,15 @@ export default function SetName({navigation, route}) {
             onChangeText={setName}
             value={name}
           />
+          <TouchableOpacity style={{...styles.btnGeneral, opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto'}} onPress={relocate}>
+            {loading && <ActivityIndicator size='large' color='#57AAF2' />}
+            {!loading && (
+              <>
+                <Text style={{ color: '#57AAF2', textAlign: 'center' }}>Relocalizar</Text>
+                {!!error && <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text>}
+              </>
+            )}
+          </TouchableOpacity>
           <BtnGeneral
             action={() => {
               continueReport()
@@ -90,5 +131,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 30,
     marginTop: 60
-  }
+  },
+  btnGeneral: {
+    borderColor: '#57AAF2',
+    borderWidth: 2,
+    width: 330,
+    height: 57,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 20
+  },
 })
