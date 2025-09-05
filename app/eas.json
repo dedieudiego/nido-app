@@ -5,8 +5,8 @@
   "build": {
     "development": {
       "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://rgkyshqodtorkauuvzau.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJna3lzaHFvZHRvcmthdXV2emF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDI3NzYsImV4cCI6MjA2MTE3ODc3Nn0.Obawn_i3OflqG4j7QtcXqDuPV_unhrNAsW5dSECEqS8"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://hquobyojfddghwxumklj.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdW9ieW9qZmRkZ2h3eHVta2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0ODQ3MzksImV4cCI6MjA3MjA2MDczOX0.qR9qLuf1lgXzu9nQCcaaGQOjSqahKCa-njJdyXFFnc0"
       },
       "ios": {
         "simulator": true
@@ -14,8 +14,8 @@
     },
     "preview": {
       "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://rgkyshqodtorkauuvzau.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJna3lzaHFvZHRvcmthdXV2emF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDI3NzYsImV4cCI6MjA2MTE3ODc3Nn0.Obawn_i3OflqG4j7QtcXqDuPV_unhrNAsW5dSECEqS8"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://hquobyojfddghwxumklj.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdW9ieW9qZmRkZ2h3eHVta2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0ODQ3MzksImV4cCI6MjA3MjA2MDczOX0.qR9qLuf1lgXzu9nQCcaaGQOjSqahKCa-njJdyXFFnc0"
       },
       "android": {
         "buildType": "apk"
@@ -26,8 +26,8 @@
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://rgkyshqodtorkauuvzau.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJna3lzaHFvZHRvcmthdXV2emF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDI3NzYsImV4cCI6MjA2MTE3ODc3Nn0.Obawn_i3OflqG4j7QtcXqDuPV_unhrNAsW5dSECEqS8"
+        "EXPO_PUBLIC_SUPABASE_URL": "https://hquobyojfddghwxumklj.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdW9ieW9qZmRkZ2h3eHVta2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0ODQ3MzksImV4cCI6MjA3MjA2MDczOX0.qR9qLuf1lgXzu9nQCcaaGQOjSqahKCa-njJdyXFFnc0"
       },
       "credentialsSource": "remote"
     }
