@@ -29,6 +29,17 @@ export default function EndReport({navigation, route}) {
 
   console.log("isConnected", isConnected);
 
+  const createLog = async(data) => {
+    try {
+      await supabase.from('logs').insert({
+        ...data,
+        profile_id: currentUser.profile.id
+      })
+    } catch(error) {
+      console.log("ERROR", error);
+    }
+  }
+
   const uploadImageToSupabase = async(uri) => {
     const base64 = await FileSystem.readAsStringAsync(uri, {
       encoding: FileSystem.EncodingType.Base64,
@@ -55,21 +66,35 @@ export default function EndReport({navigation, route}) {
     console.log("STEP", step);
     
     const image = await uploadImageToSupabase(dataNidos.photo.uri)
+
+    const nestPayload = {
+      name: dataNidos.nombre,
+      profile_id: step.profile_id,
+      last_step: step.step
+    }
+
+    createLog({
+      destination: 'nests',
+      body: nestPayload,
+      message: "INSERT NEST"
+    })
     
     const { data, error } = updateDataNidos 
       ? { data: null, error: null }
-      : await supabase.from('nests').insert({
-          name: dataNidos.nombre,
-          profile_id: step.profile_id,
-          last_step: step.step
-        }).select()
+      : await supabase.from('nests').insert(nestPayload).select()
 
     if (error) {
       console.log("ERROR", error);
+
+      createLog({
+        destination: 'nests',
+        body: {error},
+        message: "INSERT NEST FAILED"
+      })
     } else {
       console.log("DATA", data);
       if (dataNidos.ubicacion) {
-        const { data: location, error: locationError } = await supabase.from('locations').insert({
+        const locationPayload = {
           city: dataNidos.ubicacion.city,
           country: dataNidos.ubicacion.country,
           postal_code: dataNidos.ubicacion.postalCode,
@@ -79,26 +104,65 @@ export default function EndReport({navigation, route}) {
           subregion: dataNidos.ubicacion.subregion,
           street: dataNidos.ubicacion.street,
           number: dataNidos.ubicacion.number,
-        }).select()
+        }
+
+        createLog({
+          destination: 'locations',
+          body: locationPayload,
+          message: "INSERT LOCATION"
+        })
+
+        const { data: location, error: locationError } = await supabase.from('locations').insert(locationPayload).select()
 
         if (location?.length && !locationError) {
-          const { error: stepError } = await supabase.from('nests_steps').insert({
+          const stepPayload = {
             ...step,
             image: image.fullPath,
             nest_id: updateDataNidos ? dataNidos.id : data[0].id,
             location_id: location[0].id
+          }
+          createLog({
+            destination: 'nests_steps',
+            body: stepPayload,
+            message: "INSERT NEST STEP"
           })
-          if (stepError) console.log("ERROR", stepError);
+          const { error: stepError } = await supabase.from('nests_steps').insert(stepPayload)
+          if (stepError) {
+            createLog({
+              destination: 'nests_steps',
+              body: {error: stepError},
+              message: "INSERT NEST STEP FAILED"
+            })
+            console.log("ERROR", stepError);
+          }
         } else if (locationError) {
+          createLog({
+            destination: 'locations',
+            body: {error: locationError},
+            message: "INSERT LOCATION FAILED"
+          })
           console.log("LOCATION ERROR", locationError);
         }
       } else {
-        const { error: stepError } = await supabase.from('nests_steps').insert({
+        const stepPayload = {
           ...step,
           image: image.fullPath,
           nest_id: updateDataNidos ? dataNidos.id : data[0].id
+        }
+        createLog({
+          destination: 'nests_steps',
+          body: stepPayload,
+          message: "INSERT NEST STEP"
         })
-        if (stepError) console.log("ERROR", stepError);
+        const { error: stepError } = await supabase.from('nests_steps').insert(stepPayload)
+        if (stepError) {
+          createLog({
+            destination: 'nests_steps',
+            body: {error: stepError},
+            message: "INSERT NEST STEP FAILED"
+          })
+          console.log("ERROR", stepError);
+        }
       }
     };
     console.log("LOADING FALSE");
