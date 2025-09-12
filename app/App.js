@@ -17,6 +17,9 @@ import NetInfo from '@react-native-community/netinfo'
 import { navigate } from './components/Config/NavigationService'
 import * as Location from 'expo-location'
 
+const isIOS = Platform.OS === 'ios';
+const isAndroid = Platform.OS === 'android';
+
 export default function App() {
   // CONTEXT
   const [currentUser, setCurrentUser] = useState(null)
@@ -44,7 +47,9 @@ export default function App() {
     setPendingNests,
     syncing,
     setSyncing,
-    location
+    location,
+    isIOS,
+    isAndroid
   }
 
   useEffect(() => {
@@ -100,9 +105,6 @@ export default function App() {
   })
 
   const [session, setSession] = useState(null)
-
-  const isIOS = Platform.OS === 'ios';
-  const isAndroid = Platform.OS === 'android';
 
   const refreshSession = async() => {
     const { data, error } = await supabase.auth.refreshSession()

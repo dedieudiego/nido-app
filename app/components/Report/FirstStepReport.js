@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {StyleSheet, View, Text, ScrollView, Image} from 'react-native'
+import {StyleSheet, View, Text, ScrollView, Image, Platform} from 'react-native'
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import hornero_etapa1 from '../../components/assets/Nidos/formulario/etapa1/q1/HORNERO-VECTOR-02.png'
@@ -8,7 +8,9 @@ import hornero_etapa3 from '../../components/assets/Nidos/formulario/etapa1/etap
 import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etapa4/HORNERO-VECTOR-13.png'
 import BtnGeneral from './BtnGeneral'
 
-const theMargin = Constants.statusBarHeight + 30
+const isIOS = Platform.OS === 'ios';
+const theMargin = isIOS ? Constants.statusBarHeight + 60 : Constants.statusBarHeight + 30
+
 export default function FirstStepReport({navigation}) {
   const {dataNidos, setDataNidos} = useContext(AppStateContext)
 

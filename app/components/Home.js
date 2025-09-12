@@ -10,7 +10,7 @@ import * as Linking from 'expo-linking';
 import * as Location from 'expo-location';
 
 export default function Home({ route, navigation }) {
-  const { currentUser, setCurrentUser, setUpdateDataNidos } = useContext(AppStateContext)
+  const { currentUser, setCurrentUser, setUpdateDataNidos, isIOS } = useContext(AppStateContext)
   const { navigate } = navigation;
   const url = Linking.useURL();
 
@@ -78,7 +78,7 @@ export default function Home({ route, navigation }) {
 
   return (
     <View style={styles.vwScreen}>
-      <View style={styles.vwOverMenu}>
+      <View style={{...styles.vwOverMenu, paddingTop: isIOS ? 60 : 20}}>
         <View style={styles.vwBottom}>
           {currentUser ? (
             <Text allowFontScaling={false} style={styles.textHello}>¡Hola {currentUser?.profile?.first_name}!</Text>
@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
   },
   vwOverMenu: {
     flex: 1,
-    paddingTop: 20,
     backgroundColor: '#EEEEEE',
     borderBottomLeftRadius: 50,
   },

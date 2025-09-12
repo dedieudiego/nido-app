@@ -8,7 +8,7 @@ import { supabase } from '../../lib/supabase'
 import hornero_etapa4 from '../../components/assets/Nidos/formulario/etapa1/etapa4/HORNERO-VECTOR-13.png'
 
 export default function ReportsTerminados({navigation}) {
-  const {currentUser, isConnected, pendingNests, syncing, setSyncing} = useContext(AppStateContext)
+  const {currentUser, isConnected, pendingNests, syncing, setSyncing, isIOS} = useContext(AppStateContext)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -62,7 +62,7 @@ export default function ReportsTerminados({navigation}) {
   }, [currentUser])
 
   return (
-    <ScrollView style={{marginTop: Constants.statusBarHeight}}>
+    <ScrollView style={{marginTop: isIOS ? Constants.statusBarHeight + 30 : Constants.statusBarHeight}}>
       <View style={styles.vwScreen}>
         <View style={styles.vwMain}>
           <Image source={hornero_etapa4} style={styles.imageHornero} />

@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import {StyleSheet, View, Text, BackHandler, Image} from 'react-native'
+import {StyleSheet, View, Text, BackHandler, Image, Platform} from 'react-native'
 import Constants from 'expo-constants'
 import ModalCancel from '../Shared/ModalCancel'
 import photo from '../../components/assets/Nidos/formulario/etapa1/q6/photo.png'
 import BtnGeneral from './BtnGeneral'
 
-const theMargin = Constants.statusBarHeight + 30
+const isIOS = Platform.OS === 'ios';
+const theMargin = isIOS ? Constants.statusBarHeight + 60 : Constants.statusBarHeight + 30
+
 export default function PhotoBelow({navigation}) {
   const [cancelModal, setCancelModal] = useState(false)
   useEffect(() => {

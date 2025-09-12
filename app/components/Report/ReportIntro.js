@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react'
-import {StyleSheet, View, Text, ScrollView, Image, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, Platform} from 'react-native'
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 
@@ -7,6 +7,8 @@ import etapa1 from '../../components/assets/Nidos/etapas/Estadio1.png'
 import etapa2 from '../../components/assets/Nidos/etapas/Estadio2.png'
 import etapa3 from '../../components/assets/Nidos/etapas/Estadio3.png'
 import etapa4 from '../../components/assets/Nidos/etapas/Estadio4.png'
+
+const isIOS = Platform.OS === 'ios';
 
 export default function ReportIntro({navigation, route}) {
   const {dataNidos, setDataNidos, isConnected} = useContext(AppStateContext)
@@ -69,7 +71,7 @@ export default function ReportIntro({navigation, route}) {
 
 const styles = StyleSheet.create({
   vwMain: {
-    marginTop: Constants.statusBarHeight + 30,
+    marginTop: isIOS ? Constants.statusBarHeight + 60 : Constants.statusBarHeight + 30,
     marginBottom: 40,
   },
   textTitle: {

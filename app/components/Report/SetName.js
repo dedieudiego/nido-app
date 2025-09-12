@@ -1,11 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native'
+import {StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Platform} from 'react-native'
 import Constants from 'expo-constants'
 import AppStateContext from '../Shared/AppStateContext'
 import BtnGeneral from './BtnGeneral'
 import * as Location from 'expo-location'
 
-const theMargin = Constants.statusBarHeight + 30
+const isIOS = Platform.OS === 'ios';
+const theMargin = isIOS ? Constants.statusBarHeight + 60 : Constants.statusBarHeight + 30
+
 export default function SetName({navigation, route}) {
   const {dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [name, setName] = useState("Nuevo nido");

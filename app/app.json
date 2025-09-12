@@ -3,7 +3,7 @@
     "name": "Hornero",
     "slug": "hornero",
     "scheme": "com.nidohorneros",
-    "version": "1.7.7",
+    "version": "1.7.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -32,7 +32,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.nidohorneros",
-      "buildNumber": "1.7.7",
+      "buildNumber": "1.7.8",
       "supportsTablet": true,
       "usesAppleSignIn": false,
       "infoPlist": {
@@ -42,12 +42,13 @@
         "NSLocationWhenInUseUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
         "NSLocationAlwaysUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
-        "NSLocationUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is."
+        "NSLocationUsageDescription": "Nido Horneros requires your location so that we can centre the map on you & show you where your report is.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "package": "com.nidohorneros",
-      "versionCode": 25,
+      "versionCode": 26,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDa77R6XFPHLWEwoH-f6OEMxS2LjJHpM8Y"

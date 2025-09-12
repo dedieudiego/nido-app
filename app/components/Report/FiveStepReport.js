@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Platform
 } from 'react-native'
 import Constants from 'expo-constants'
 
@@ -18,7 +19,9 @@ import BtnGeneral from './BtnGeneral'
 
 import * as Location from 'expo-location'
 
-const theMargin = Constants.statusBarHeight + 30
+const isIOS = Platform.OS === 'ios';
+const theMargin = isIOS ? Constants.statusBarHeight + 60 : Constants.statusBarHeight + 30
+
 export default function FiveStepReport({navigation, route}) {
   const {currentUser, dataNidos, setDataNidos, updateDataNidos} = useContext(AppStateContext)
   const [location, setLocation] = useState(null)
