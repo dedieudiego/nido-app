@@ -102,6 +102,27 @@ export default function Login({route, navigation}) {
     setIsLoading(false)
   }
 
+  const createProfile = async (data, userInfo) => {
+    const { email, givenName, familyName } = userInfo.data.user;
+
+    const { data: profile, error } = await supabase.from('profiles').insert({
+      email: email,
+      first_name: givenName,
+      last_name: familyName,
+      user_id: data.user.id,
+    }).select()
+
+    if (error) setUserMessage(error.message);
+    else {
+      const user = {...data, profile: profile[0]};
+      setCurrentUser(user);
+      const jsonValue = JSON.stringify(user)
+      DeviceStorage.saveItem('userPersistance', jsonValue)
+
+      navigate('Inicio')
+    }
+  }
+
   const googleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices()
