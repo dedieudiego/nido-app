@@ -10,10 +10,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native'
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin'
+import * as WebBrowser from 'expo-web-browser'
+import * as Linking from 'expo-linking'
 import Hornero from '../assets/Nidos/hornero-logo-fin-variables.png'
 import btnCerrar from '../assets/btnCerrar.png'
 import IconFacebook from '../assets/iconFacebook.png'
@@ -28,7 +26,7 @@ import { supabase } from '../../lib/supabase'
 
 const url = config.url.API_URL + 'login'
 
-//WebBrowser.maybeCompleteAuthSession()
+WebBrowser.maybeCompleteAuthSession()
 
 export default function Login({route, navigation}) {
   const {currentUser, setCurrentUser, isConnected} = useContext(AppStateContext)
@@ -42,13 +40,6 @@ export default function Login({route, navigation}) {
   const [errorPassword, setErrorPassword] = useState('')
   const [backToParam, setBackTo] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-
-  GoogleSignin.configure({
-    scopes: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
-    webClientId: '651519405886-me8voa58400ur00j35k070tvbncjk22i.apps.googleusercontent.com',
-    iosClientId: '651519405886-qvbal3240pogi1g8f15o2uvgu5107op1.apps.googleusercontent.com',
-    offlineAccess: true
-  })
 
   useEffect(() => {
     //TODO >> SACAR ESTO Y TOMARLO DEL CONTEXT
@@ -103,7 +94,7 @@ export default function Login({route, navigation}) {
   }
 
   const createProfile = async (data, userInfo) => {
-    const { email, givenName, familyName } = userInfo.data.user;
+    const { email, givenName, familyName } = userInfo;
 
     const { data: profile, error } = await supabase.from('profiles').insert({
       email: email,
@@ -124,46 +115,68 @@ export default function Login({route, navigation}) {
   }
 
   const googleLogin = async () => {
-    try {
-      await GoogleSignin.hasPlayServices()
-      const userInfo = await GoogleSignin.signIn()
-      if (userInfo.data.idToken) {
-        const { data, error } = await supabase.auth.signInWithIdToken({
-          provider: 'google',
-          token: userInfo.data.idToken,
-        })
-        if (!error && data) {
-          const { data: profile } = await supabase.from('profiles')
-            .select('*')
-            .eq('user_id', data.user.id)
-            .single()
+    const redirectTo = Linking.createURL('auth/callback')
 
-          if (!profile) {
-            createProfile(data, userInfo);
-          } else {
-            const user = {...data, profile};
-            setCurrentUser(user)
-      
-            const jsonValue = JSON.stringify(user)
-            DeviceStorage.saveItem('userPersistance', jsonValue)
-      
-            navigate('Inicio')
-          }
-
-        }
-      } else {
-        throw new Error('no ID token present!')
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        skipBrowserRedirect: true
       }
-    } catch (error) {
-      console.log("ERROR", error);
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-      } else {
-        // some other error happened
+    })
+
+    if (error) {
+      console.log(error)
+      return
+    }
+
+    const result = await WebBrowser.openAuthSessionAsync(
+      data.url,
+      redirectTo
+    )
+
+    if (result.type === 'success') {
+
+      const fragment = result.url.split('#')[1]
+
+      const params = new URLSearchParams(fragment)
+
+      const access_token = params.get('access_token')
+      const refresh_token = params.get('refresh_token')
+
+      const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+        access_token,
+        refresh_token
+      })
+
+      if (sessionError) {
+        return setIsLogged(sessionError.message);
+      }
+
+      if (sessionData.user) {
+        const { data: profile } = await supabase.from('profiles')
+          .select('*')
+          .eq('user_id', sessionData.user.id)
+          .single()
+        
+        if (!profile) {
+          const {full_name, email} = sessionData.user.user_metadata;
+
+          const parts = full_name.split(' ')
+
+          const givenName = parts[0]
+          const familyName = parts.slice(1).join(' ')
+
+          createProfile(sessionData, { givenName, familyName, email });
+        } else {
+          const user = {...sessionData, profile};
+          setCurrentUser(user)
+    
+          const jsonValue = JSON.stringify(user)
+          DeviceStorage.saveItem('userPersistance', jsonValue)
+    
+          navigate('Inicio')
+        }
       }
     }
   }

@@ -3,7 +3,7 @@
     "name": "Hornero",
     "slug": "hornero",
     "scheme": "com.nidohorneros",
-    "version": "1.7.9",
+    "version": "1.8.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -14,11 +14,12 @@
     "plugins": [
       "expo-camera",
       [
-        "@react-native-google-signin/google-signin",
+        "expo-web-browser",
         {
           "iosUrlScheme": "com.googleusercontent.apps.651519405886-qvbal3240pogi1g8f15o2uvgu5107op1"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "updates": {
       "fallbackToCacheTimeout": 0,
@@ -32,7 +33,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.nidohorneros",
-      "buildNumber": "1.7.9",
+      "buildNumber": "1.8.0",
       "supportsTablet": true,
       "usesAppleSignIn": false,
       "infoPlist": {
@@ -48,7 +49,7 @@
     },
     "android": {
       "package": "com.nidohorneros",
-      "versionCode": 27,
+      "versionCode": 28,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDa77R6XFPHLWEwoH-f6OEMxS2LjJHpM8Y"

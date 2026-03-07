@@ -25,6 +25,9 @@
       }
     },
     "production": {
+      "android": {
+        "image": "latest"
+      },
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://hquobyojfddghwxumklj.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxdW9ieW9qZmRkZ2h3eHVta2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0ODQ3MzksImV4cCI6MjA3MjA2MDczOX0.qR9qLuf1lgXzu9nQCcaaGQOjSqahKCa-njJdyXFFnc0"
