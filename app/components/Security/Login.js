@@ -9,13 +9,14 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
+  Platform,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import * as Linking from 'expo-linking'
 import Hornero from '../assets/Nidos/hornero-logo-fin-variables.png'
 import btnCerrar from '../assets/btnCerrar.png'
-import IconFacebook from '../assets/iconFacebook.png'
 import IconGoogle from '../assets/iconGoogle.png'
+import IconApple from '../assets/iconApple.png'
 
 import Constants from 'expo-constants'
 import {config} from '../Config/Config'
@@ -40,6 +41,7 @@ export default function Login({route, navigation}) {
   const [errorPassword, setErrorPassword] = useState('')
   const [backToParam, setBackTo] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [oauthProviderLoading, setOauthProviderLoading] = useState('')
 
   useEffect(() => {
     //TODO >> SACAR ESTO Y TOMARLO DEL CONTEXT
@@ -103,7 +105,7 @@ export default function Login({route, navigation}) {
       user_id: data.user.id,
     }).select()
 
-    if (error) setUserMessage(error.message);
+    if (error) setIsLogged(error.message);
     else {
       const user = {...data, profile: profile[0]};
       setCurrentUser(user);
@@ -114,20 +116,60 @@ export default function Login({route, navigation}) {
     }
   }
 
-  const googleLogin = async () => {
+  const buildUserInfoFromOAuth = (user, provider) => {
+    const metadata = user?.user_metadata || {}
+    const identityData = user?.identities?.find((identity) => identity.provider === provider)?.identity_data || {}
+
+    const metadataFullName = metadata.full_name || metadata.name || identityData.full_name || identityData.name || ''
+    const fullNameParts = metadataFullName.split(' ').filter(Boolean)
+
+    const email = metadata.email || identityData.email || user?.email || ''
+    const emailBase = email.split('@')[0] || ''
+    const emailParts = emailBase.split(/[._-]/).filter(Boolean)
+
+    const fallbackGivenName = emailParts[0] || 'Usuario'
+    const fallbackFamilyName = emailParts.slice(1).join(' ') || (provider === 'apple' ? 'Apple' : 'Social')
+
+    const givenName =
+      metadata.given_name ||
+      metadata.first_name ||
+      identityData.given_name ||
+      identityData.first_name ||
+      fullNameParts[0] ||
+      fallbackGivenName
+
+    const familyName =
+      metadata.family_name ||
+      metadata.last_name ||
+      identityData.family_name ||
+      identityData.last_name ||
+      fullNameParts.slice(1).join(' ') ||
+      fallbackFamilyName
+
+    return {
+      email,
+      givenName,
+      familyName,
+    }
+  }
+
+  const oauthLogin = async (provider) => {
+    setOauthProviderLoading(provider)
+
     const redirectTo = Linking.createURL('auth/callback')
 
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider,
       options: {
         redirectTo,
-        skipBrowserRedirect: true
+        skipBrowserRedirect: true,
+        scopes: provider === 'apple' ? 'name email' : undefined,
       }
     })
 
     if (error) {
-      console.log(error)
-      return
+      setOauthProviderLoading('')
+      return setIsLogged(error.message)
     }
 
     const result = await WebBrowser.openAuthSessionAsync(
@@ -136,20 +178,40 @@ export default function Login({route, navigation}) {
     )
 
     if (result.type === 'success') {
+      const query = result.url.split('?')[1]?.split('#')[0] || ''
+      const queryParams = new URLSearchParams(query)
+      const code = queryParams.get('code')
 
-      const fragment = result.url.split('#')[1]
+      let sessionData
+      let sessionError
 
-      const params = new URLSearchParams(fragment)
+      if (code) {
+        const response = await supabase.auth.exchangeCodeForSession(code)
+        sessionData = response.data
+        sessionError = response.error
+      } else {
+        const fragment = result.url.split('#')[1] || ''
+        const params = new URLSearchParams(fragment)
 
-      const access_token = params.get('access_token')
-      const refresh_token = params.get('refresh_token')
+        const access_token = params.get('access_token')
+        const refresh_token = params.get('refresh_token')
 
-      const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-        access_token,
-        refresh_token
-      })
+        if (!access_token || !refresh_token) {
+          setOauthProviderLoading('')
+          return setIsLogged('No se pudo completar la autenticacion social.')
+        }
+
+        const response = await supabase.auth.setSession({
+          access_token,
+          refresh_token
+        })
+
+        sessionData = response.data
+        sessionError = response.error
+      }
 
       if (sessionError) {
+        setOauthProviderLoading('')
         return setIsLogged(sessionError.message);
       }
 
@@ -160,14 +222,8 @@ export default function Login({route, navigation}) {
           .single()
         
         if (!profile) {
-          const {full_name, email} = sessionData.user.user_metadata;
-
-          const parts = full_name.split(' ')
-
-          const givenName = parts[0]
-          const familyName = parts.slice(1).join(' ')
-
-          createProfile(sessionData, { givenName, familyName, email });
+          const userInfo = buildUserInfoFromOAuth(sessionData.user, provider)
+          createProfile(sessionData, userInfo);
         } else {
           const user = {...sessionData, profile};
           setCurrentUser(user)
@@ -179,7 +235,12 @@ export default function Login({route, navigation}) {
         }
       }
     }
+
+    setOauthProviderLoading('')
   }
+
+  const googleLogin = async () => oauthLogin('google')
+  const appleLogin = async () => oauthLogin('apple')
 
   //OFFLINE
   if (!isConnected) {
@@ -263,21 +324,24 @@ export default function Login({route, navigation}) {
             >
               <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
                 <Image source={IconGoogle} />
-                <Text>Vincular con mi cuenta Google</Text>
+                <Text>{oauthProviderLoading === 'google' ? 'Conectando con Google...' : 'Vincular con mi cuenta Google'}</Text>
               </View>
             </TouchableHighlight>
 
-            {/* <TouchableHighlight
-              style={styles.btnSocial}
-              activeOpacity={1}
-              onPress={() => console.log("Google")}
-            >
-              <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image source={IconFacebook} />
-                <Text>Vincular con mi cuenta Facebook</Text>
-              </View>
-            </TouchableHighlight> */}
-        </View>
+            {Platform.OS === 'ios' && (
+              <TouchableHighlight
+                style={styles.btnSocial}
+                activeOpacity={0.5}
+                underlayColor='#ffffff'
+                onPress={appleLogin}
+              >
+                <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                  <Image source={IconApple} />
+                  <Text>{oauthProviderLoading === 'apple' ? 'Conectando con Apple...' : 'Vincular con mi cuenta Apple'}</Text>
+                </View>
+              </TouchableHighlight>
+            )}
+          </View>
 
         <View style={styles.vwBottom}>
           <TouchableHighlight
@@ -386,5 +450,15 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 12,
     fontFamily: 'Roboto_500Medium',
+  },
+  appleIcon: {
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    backgroundColor: '#111111',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    overflow: 'hidden',
+    fontFamily: 'Roboto_700Bold',
   }
 })
