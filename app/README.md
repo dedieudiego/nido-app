@@ -43,4 +43,7 @@ npm start
 ```bash
 eas build --profile preview --platform android
 eas build --platform android
+
+eas build --platform ios
+eas submit --platform ios
 ```
