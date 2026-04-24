@@ -3,7 +3,7 @@
     "name": "Hornero",
     "slug": "hornero",
     "scheme": "com.nidohorneros",
-    "version": "1.8.2",
+    "version": "1.8.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -33,7 +33,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.nidohorneros",
-      "buildNumber": "1.8.2",
+      "buildNumber": "1.8.3",
       "supportsTablet": true,
       "usesAppleSignIn": false,
       "infoPlist": {

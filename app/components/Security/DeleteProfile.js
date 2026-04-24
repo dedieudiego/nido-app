@@ -2,13 +2,10 @@ import React, {useState, useContext} from 'react'
 import {StyleSheet, View, Text, TouchableHighlight, Image, Modal} from 'react-native'
 import imagenCuentaEliminada from '../assets/imagenCuentaEliminada.png'
 import DeviceStorage from '../Shared/DeviceStorage'
-import {config} from '../Config/Config'
-import axios from 'axios'
 import ModalSinConexion from '../Shared/ModalSinConexion'
 import AppStateContext from '../Shared/AppStateContext'
 import {useNavigation} from '@react-navigation/native'
-
-var url = config.url.API_URL + 'user'
+import { supabase } from '../../lib/supabase'
 
 export default function DeleteProfile() {
   const navigation = useNavigation()
@@ -16,30 +13,31 @@ export default function DeleteProfile() {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalOkVisible, setModalOkVisible] = useState(false)
 
-  const deleteAccount = () => {
+  const deleteAccount = async () => {
     setModalVisible((prev) => !prev)
 
     if (currentUser) {
-      axios
-        .delete(url, {headers: {Authorization: `Bearer ${currentUser.access_token}`}})
-        .then(function (response) {
-          setModalOkVisible(!modalOkVisible)
+      try {
+        const { data, error } = await supabase.functions.invoke('delete-user', {
+          body: { userId: currentUser.profile.user_id },
         })
-        .catch(function (error) {
-          if (error.response) {
-            //error.response.data.message
-          } else if (error.request) {
-            //error.request
-          } else {
-            //error.message
-          }
-        })
+
+        if (error) {
+          console.error(error)
+        } else {
+          console.log(data)
+          setModalOkVisible(true);
+        }
+      } catch (error) {
+        console.error(error.response?.data || error.message)
+      }
     }
   }
 
   const exitToInit = () => {
     setCurrentUser(null)
     DeviceStorage.removeItem('userPersistance').then(setModalOkVisible(!modalOkVisible))
+    navigation.navigate('Inicio')
     setModalOkVisible((prev) => !prev)
   }
 
@@ -227,7 +225,6 @@ const stylesModal = StyleSheet.create({
     height: 50,
     borderRadius: 5,
     justifyContent: 'center',
-    padding: 20,
     marginRight: 10,
     width: 130,
   },
@@ -238,7 +235,6 @@ const stylesModal = StyleSheet.create({
     height: 50,
     borderRadius: 5,
     justifyContent: 'center',
-    padding: 20,
     width: 130,
   },
   textBtnCancelOk: {
