@@ -45,5 +45,6 @@ eas build --profile preview --platform android
 eas build --platform android
 
 eas build --platform ios
+EXPO_NO_CAPABILITY_SYNC=1 eas build --platform ios
 eas submit --platform ios
 ```

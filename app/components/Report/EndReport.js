@@ -5,8 +5,7 @@ import {FontAwesome} from '@expo/vector-icons'
 import AppStateContext from '../Shared/AppStateContext'
 import DeviceStorage from '../Shared/DeviceStorage'
 import { supabase } from '../../lib/supabase'
-import * as FileSystem from 'expo-file-system';
-import { decode } from 'base64-arraybuffer'
+import {File} from 'expo-file-system'
 
 import hornero_etapa1 from '../../components/assets/Nidos/formulario/etapa1/q1/HORNERO-VECTOR-02.png'
 import hornero_etapa2 from '../../components/assets/Nidos/formulario/etapa1/q1/HORNERO-VECTOR-05.png'
@@ -41,16 +40,15 @@ export default function EndReport({navigation, route}) {
   }
 
   const uploadImageToSupabase = async(uri) => {
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
+    const imageFile = new File(uri)
+    const imageBuffer = await imageFile.arrayBuffer()
   
     const fileName = `${currentUser.profile.id}-${Date.now()}.jpg`;
   
     const { data, error } = await supabase
       .storage
       .from('images')
-      .upload(fileName, decode(base64), {
+      .upload(fileName, imageBuffer, {
         contentType: 'image/jpg'
       })
   

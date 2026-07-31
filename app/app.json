@@ -19,7 +19,8 @@
           "iosUrlScheme": "com.googleusercontent.apps.651519405886-qvbal3240pogi1g8f15o2uvgu5107op1"
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-status-bar"
     ],
     "updates": {
       "fallbackToCacheTimeout": 0,
