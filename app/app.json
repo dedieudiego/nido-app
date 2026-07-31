@@ -6,11 +6,6 @@
     "version": "1.8.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "plugins": [
       "expo-camera",
       [
@@ -29,9 +24,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "notification": {
-      "icon": "./assets/icon.png"
-    },
     "ios": {
       "bundleIdentifier": "com.nidohorneros",
       "buildNumber": "1.8.3",
